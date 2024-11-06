@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>LavaLust UI</title>
+	<title>QuizMaster</title>
 	<link rel="icon" type="image/png" href="<?=base_url();?>public/img/favicon.ico"/>
 	<!-- Fonts -->
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">
