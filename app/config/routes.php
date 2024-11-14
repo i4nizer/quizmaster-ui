@@ -44,8 +44,19 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 */
 
 $router->get('/', 'Auth');
-$router->get('/home', 'Home');
-$router->group('/auth', function() use ($router){
+
+$router->group('/home', function() use ($router) {
+    $router->get('/', 'Home');
+    
+    $router->group('/quiz', function() use ($router) {
+        $router->get('/', 'Quiz::get');
+        $router->post('/', 'Quiz::post');
+        $router->patch('/', 'Quiz::patch');
+        $router->delete('/', 'Quiz::delete');
+    });
+});
+
+$router->group('/auth', function() use ($router) {
     $router->match('/register', 'Auth::register', ['POST', 'GET']);
     $router->match('/login', 'Auth::login', ['POST', 'GET']);
     $router->get('/logout', 'Auth::logout');
