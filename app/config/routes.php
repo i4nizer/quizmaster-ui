@@ -45,21 +45,42 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 $router->get('/', 'Auth');
 
-$router->group('/home', function() use ($router) {
-    $router->get('/', 'Home');
-    
-    $router->group('/quiz', function() use ($router) {
+$router->group('/user', function() use ($router) {
+
+    $router->get('/', 'Page::user_dashboard');
+    $router->get('/dashboard', 'Page::user_dashboard');
+    $router->get('/profile', 'Page::user_profile');
+    $router->get('/quizzes', 'Page::user_quizzes');
+    $router->get('/settings', 'Page::user_settings');
+
+    $router->group('/quiz', function () use ($router) {
+
         $router->get('/', 'Quiz::get');
         $router->post('/', 'Quiz::post');
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
+
     });
+
+    # Equivalent to /user/category since this is nested under it
+    $router->group('/category', function () use ($router) {
+
+        # This invokes the function get() of class Category on GET request
+        $router->get('/', 'Category::get');
+
+        # User can only GET for Categories though
+        # Let's manipulate the data in phpmyadmin then
+
+    });
+
 });
 
 $router->group('/auth', function() use ($router) {
+    
     $router->match('/register', 'Auth::register', ['POST', 'GET']);
     $router->match('/login', 'Auth::login', ['POST', 'GET']);
     $router->get('/logout', 'Auth::logout');
     $router->match('/password-reset', 'Auth::password_reset', ['POST', 'GET']);
     $router->match('/set-new-password', 'Auth::set_new_password', ['POST', 'GET']);
+    
 });

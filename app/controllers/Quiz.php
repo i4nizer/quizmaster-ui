@@ -5,7 +5,7 @@ defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed');
 class Quiz extends Controller
 {
 
-    /** Init database access. */
+    /** Init model */
     public function __construct()
     {
         parent::__construct();
@@ -45,7 +45,7 @@ class Quiz extends Controller
                 ->max_length(100, 'Quiz title must not be more than 100 characters.');
 
             # Check errors
-            if ($this->form_validation->run()) {
+            if ($this->form_validation->run() != false) {
 
                 $quizId = $this->quiz->create($userId, $title, $description);
 
@@ -104,7 +104,7 @@ class Quiz extends Controller
             $patched = $this->quiz->update_user_one($userId, $quizId, $title, $description);
 
             # Send quiz
-            if ($patched) $this->json_quiz($quizId, $title, $description, $userId);
+            if ($patched) echo "Quiz updated successfully.";
 
             # Send 500 status code for failed update
             else $this->error('Failed to update quiz.', 500);

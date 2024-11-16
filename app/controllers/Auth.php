@@ -26,10 +26,11 @@ class Auth extends Controller {
             if(empty($data)) {
 				$this->session->set_flashdata(['is_invalid' => 'is-invalid']);
                 $this->session->set_flashdata(['err_message' => 'These credentials do not match our records.']);
+                redirect('auth/login');
 			} else {
 				$this->lauth->set_logged_in($data);
+                redirect('user/dashboard');
 			}
-            redirect('auth/login');
         } else {
             $this->call->view('auth/login');
         }

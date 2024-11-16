@@ -2,6 +2,6 @@
     <p class="p-2 text-center">List of Quizzes</p>
 
     <!-- Quiz Items Here -->
-    
+
 
 </div>
