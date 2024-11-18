@@ -1,24 +1,24 @@
 $(async () => {
 
-    // CREATE a Quiz Item
+    // APPEND a Quiz Item
     const addQuizItem = (id, title, description) => {
 
         // Craft Element
         const quizItem = `
             <div class="quiz-item d-flex flex-column gap-1 border rounded p-2">
                 <input class="id" type="hidden" name="id" value="${id}">
-                <input class="title border-0 rounded w-100 p-2" type="text" name="title" value="${title}">
-                <textarea class="description w-100 border-0 rounded p-2" rows="1" name="description" placeholder="Quiz Description">${description}</textarea>
-                <div class="d-flex justify-content-end">
+                <div class="title-box d-flex gap-2">
+                    <input class="title border rounded w-100 p-2" type="text" name="title" value="${title}">
+                    <a class="btn btn-primary btn-open" href="/user/quizzes/quiz/${id}">Open</a>
                     <button class="btn btn-danger btn-delete">Delete</button>
                 </div>
+                <textarea style="display: none" class="description w-100 border rounded p-2" rows="1" name="description" placeholder="Quiz Description">${description}</textarea>
             </div>
         `
 
         // Get List and Append
         $('#quiz-list').append(quizItem)
     }
-
 
     // RETRIEVE Quizzes
     await fetch('/user/quiz')
@@ -30,12 +30,14 @@ $(async () => {
     // UPDATE Quiz when Changed
     $('#quiz-list').on('change', '.title, .description', async (event) => {
 
-        // Get Data
+        // Get the Quiz Item
         const quizListItem = $(event.target).parent()
+        
+        // Access id, title, description
         const data = {
             id: quizListItem.children('.id').val(),
-            title: quizListItem.children('.title').val(),
-            description: quizListItem.children('.description').val()
+            title: quizListItem.find('.title').val(),
+            description: quizListItem.children('.description').val(),
         }
         
         // Craft Request
@@ -74,9 +76,19 @@ $(async () => {
         // Remove in DOM
         quizListItem.remove()
     });
-
     
-    // HANDLE Catch Form Submit
+    // QuizItem.Hover: Slide Down and Show Textarea
+    $('#quiz-list').hover(() => {
+
+        // Show description on hover
+        $('.quiz-item').mouseenter((event) => $(event.target).find('.description').fadeIn(500) )
+        
+        // Hide description on hover
+        $('.quiz-item').mouseleave((event) => $(event.target).find('.description').stop().hide() )
+
+    })
+    
+    // HANDLE quiz creation
     $('#quiz-form').on('submit', async (e) => {
         
         // Avoid page reload

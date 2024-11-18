@@ -8,7 +8,7 @@ class Auth extends Controller {
         parent::__construct();
         if(segment(2) != 'logout') {
             if(logged_in()) {
-                redirect('home');
+                redirect('user/dashboard');
             }
         }
         $this->call->library('email');

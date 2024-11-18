@@ -50,7 +50,14 @@ $router->group('/user', function() use ($router) {
     $router->get('/', 'Page::user_dashboard');
     $router->get('/dashboard', 'Page::user_dashboard');
     $router->get('/profile', 'Page::user_profile');
-    $router->get('/quizzes', 'Page::user_quizzes');
+    
+    $router->group('/quizzes', function () use ($router) {
+        
+        $router->get('/', 'Page::user_quizzes');
+        $router->get('/quiz/{quizId}', 'Page::user_quizzes_quiz');
+
+    });
+
     $router->get('/settings', 'Page::user_settings');
 
     $router->group('/quiz', function () use ($router) {
@@ -60,16 +67,13 @@ $router->group('/user', function() use ($router) {
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
 
-    });
+        $router->group('/category', function () use ($router) {
 
-    # Equivalent to /user/category since this is nested under it
-    $router->group('/category', function () use ($router) {
+            $router->get('/', 'Category::get');
+            $router->post('/', 'Category::post');
+            $router->get('/{quizId}', 'Category::get_quiz');
 
-        # This invokes the function get() of class Category on GET request
-        $router->get('/', 'Category::get');
-
-        # User can only GET for Categories though
-        # Let's manipulate the data in phpmyadmin then
+        });
 
     });
 

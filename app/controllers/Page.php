@@ -9,8 +9,9 @@ class Page extends Controller
     public function __construct()
     {
         parent::__construct();
+        if (! logged_in()) return redirect('auth/login');
 
-        if (! logged_in()) redirect('auth/login');
+        $this->call->model('Quiz_model', 'quiz');
     }
 
     public function user_dashboard()
@@ -22,10 +23,27 @@ class Page extends Controller
     {
         $this->call->view('user/profile');
     }
-    
+
     public function user_quizzes()
     {
         $this->call->view('user/quizzes');
+    }
+    
+    public function user_quizzes_quiz($quizId)
+    {
+        if (!$quizId) return redirect('user/quizzes');
+
+        # Get quiz of the user
+        $userId = get_user_id();
+        $res = $this->quiz->get_user_one($userId, $quizId);
+
+        # User doesn't exists
+        // if (!$res) {
+        //     echo "No Quizzes Found";
+        //     return;
+        // }        
+
+        $this->call->view('user/quizzes/quiz');
     }
     
     public function user_settings()

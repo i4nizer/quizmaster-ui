@@ -4,26 +4,23 @@
     <?php include APP_DIR . 'views/templates/header.php'; ?>
     <?php include APP_DIR . 'views/templates/drawer.php'; ?>
 
-    <main class="p-5 m-0 d-flex flex-wrap justify-content-center gap-4">
+    <main class="p-5 m-0 d-flex flex-wrap justify-content-center gap-2">
 
-        <!-- All Categories in System-->
+        <!-- Quiz Creation Form -->
         <div class="card w-25">
-            <div class="card-header">Categories</div>
-            <div class="card-body d-flex flex-column">
+            <div class="card-header">Start Twisting Minds</div>
+            <div class="card-body">
 
-                <!-- Category List -->
-                <?php include APP_DIR . 'views/templates/category/category_list.php' ?>
+                <!-- Quiz Form -->
+                <?php include APP_DIR . 'views/templates/quiz/quiz_form.php'; ?>
 
             </div>
         </div>
 
         <!-- Quizzes User Created -->
         <div class="card w-50">
-            <div class="card-header">Quizzes</div>
-            <div class="card-body d-flex flex-column ">
-
-                <!-- Quiz Creation Form -->
-                <?php include APP_DIR . 'views/templates/quiz/quiz_form.php'; ?>
+            <div class="card-header">Keep Making Quizzes</div>
+            <div class="card-body">
 
                 <!-- Quiz List -->
                 <?php include APP_DIR . 'views/templates/quiz/quiz_list.php'; ?>
@@ -33,6 +30,6 @@
 
     </main>
 
-<body>
-    
-</html>
+    <body>
+
+        </html>

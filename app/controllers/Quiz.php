@@ -93,7 +93,7 @@ class Quiz extends Controller
 
             # Validate description
             if (isset($data['description']) && gettype($data['description']) !== 'string') return $this->error('Quiz description must be type of string.');
-
+            
             # Get data
             $userId = get_user_id();
             $quizId = $data['id'];
@@ -117,7 +117,7 @@ class Quiz extends Controller
     public function delete()
     {
         # DELETE METHOD ONLY
-        if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
+        if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {   
 
             # Get patch data
             $raw = file_get_contents('php://input');

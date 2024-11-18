@@ -57,8 +57,9 @@ class Quiz_model extends Model
     /** Get a specific quiz created by the user. */
     public function get_user_one($userId, $quizId, $deleted = false)
     {
-        if ($deleted) return $this->db->table('quizzes')->where('id = ? AND creator_id', [$quizId, $userId])->where_not_null('deleted_at')->get();
-        else return $this->db->table('quizzes')->where('id = ? AND creator_id', [$quizId, $userId])->where_null('deleted_at')->get();
+        if ($deleted === true) return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where('deleted_at != NULL')->get();
+        else if ($deleted === null) return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->get();
+        else return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where('deleted_at = NULL')->get();
     }
 
     /** Modifies specific user's quiz. */
@@ -70,9 +71,9 @@ class Quiz_model extends Model
         if ($title !== null) $data['title'] = $title;
         if ($description !== null) $data['description'] = $description;
 
-        $res = $this->db->table('quizzes')->where('creator_id = ? AND id = ?', [$userId, $quizId])->update($data);
+        $quizRes = $this->db->table('quizzes')->where('creator_id = ? AND id = ?', [$userId, $quizId])->update($data);
 
-        if ($res) {
+        if ($quizRes) {
             $this->db->commit();
             return true;
         } else {
