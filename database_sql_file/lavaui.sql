@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 18, 2024 at 08:18 AM
+-- Generation Time: Nov 18, 2024 at 05:40 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -46,6 +46,9 @@ CREATE TABLE `analytics` (
 
 CREATE TABLE `answers` (
   `id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `quiz_id` int NOT NULL,
+  `category_id` int NOT NULL,
   `question_id` int DEFAULT NULL,
   `text` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `is_correct` tinyint(1) DEFAULT '0'
@@ -59,21 +62,20 @@ CREATE TABLE `answers` (
 
 CREATE TABLE `categories` (
   `id` int NOT NULL,
+  `user_id` int NOT NULL,
   `quiz_id` int NOT NULL,
   `name` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `user_id` int NOT NULL
+  `description` text COLLATE utf8mb4_general_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`id`, `quiz_id`, `name`, `user_id`) VALUES
-(5, 4, 'Games', 1),
-(6, 4, 'History', 1),
-(7, 4, 'Cat', 1),
-(8, 4, 'Mouse', 1),
-(9, 4, 'Dog', 1);
+INSERT INTO `categories` (`id`, `user_id`, `quiz_id`, `name`, `description`) VALUES
+(12, 1, 14, 'Cat Item', 'Cat Desc'),
+(15, 1, 16, 'Catow', 'Hahahha'),
+(18, 1, 15, 'Games', 'Umaayyyyy');
 
 -- --------------------------------------------------------
 
@@ -128,9 +130,11 @@ CREATE TABLE `progress` (
 CREATE TABLE `questions` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
+  `quiz_id` int NOT NULL,
   `category_id` int NOT NULL,
   `number` int NOT NULL,
   `text` text COLLATE utf8mb4_general_ci NOT NULL,
+  `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'Identification',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -155,16 +159,10 @@ CREATE TABLE `quizzes` (
 --
 
 INSERT INTO `quizzes` (`id`, `title`, `description`, `creator_id`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'urlquiz', 'somedescriptionhaha', 1, '2024-11-13 16:08:21', '2024-11-13 21:13:39', '2024-11-13 13:13:39'),
-(2, 'kwezz', 'kumagss', 1, '2024-11-13 16:29:14', '2024-11-13 21:13:54', '2024-11-13 13:13:54'),
-(3, 'First Quiz', 'This is the third edit.', 1, '2024-11-13 19:39:53', '2024-11-16 12:12:33', '2024-11-16 04:12:33'),
-(4, 'Ultra HD Haha', 'Ultra Description HAha', 1, '2024-11-13 20:26:12', '2024-11-16 12:13:48', NULL),
-(5, 'Quiz Title', 'A very very long description', 1, '2024-11-14 02:17:47', '2024-11-17 10:19:26', NULL),
-(6, 'Quiz Title', 'fshfddsj', 1, '2024-11-14 02:18:21', '2024-11-14 02:19:19', '2024-11-13 18:19:19'),
-(7, 'Ultra Kups', 'Meta Description', 1, '2024-11-17 02:28:14', '2024-11-17 04:30:54', '2024-11-16 20:30:54'),
-(8, 'New Quiz', 'Some Description', 1, '2024-11-17 08:02:26', '2024-11-17 08:04:55', '2024-11-17 00:04:55'),
-(9, 'Quiz', 'Desc', 1, '2024-11-17 13:05:40', '2024-11-17 13:06:21', '2024-11-17 05:06:21'),
-(10, 'QuizNuts', 'QuizNuts Description', 1, '2024-11-18 07:25:52', '2024-11-18 07:25:52', NULL);
+(13, 'First Quiz Title Update', 'First Description Update', 1, '2024-11-18 15:08:39', '2024-11-18 15:08:55', '2024-11-18 07:08:55'),
+(14, 'First Quiz', 'First Description', 1, '2024-11-18 15:08:58', '2024-11-18 16:40:17', '2024-11-18 08:40:17'),
+(15, 'First Quiz', 'First Description', 1, '2024-11-18 16:26:18', '2024-11-18 16:26:18', NULL),
+(16, 'Sample quiz', 'quizaa', 1, '2024-11-18 16:27:50', '2024-11-18 16:27:50', NULL);
 
 -- --------------------------------------------------------
 
@@ -196,7 +194,7 @@ INSERT INTO `sessions` (`session_id`, `user_id`, `browser`, `ip`, `session_data`
 (12, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '91b76ff986dd0882a5a3eb4d7d7895a03859e4db4f3b80c510a8009b0cc6c44f', '2024-11-16 16:56:28'),
 (13, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', 'f448a8c3c78641be9057ba3babdcd00d3cecd8f7d2c28296ab014abac7217cb3', '2024-11-16 16:57:14'),
 (14, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '2984c78637ccf7f19aed021039a84eccb10ee35ba5ed2983a7e578b24f3c9980', '2024-11-16 17:00:25'),
-(15, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', 'a0d1e8d2b228d94fa2fbc9fb50c5ad0580cc93db2c4970ba5e84679a21c71466', '2024-11-17 10:27:16');
+(16, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '790f1a07a2653a29cc3e4f58386dceaa5f73291686ac0d47f4db5391cbffb5de', '2024-11-18 23:05:54');
 
 -- --------------------------------------------------------
 
@@ -255,7 +253,10 @@ ALTER TABLE `analytics`
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `question_id` (`question_id`);
+  ADD KEY `question_id` (`question_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `quiz_id` (`quiz_id`),
+  ADD KEY `category_id` (`category_id`);
 
 --
 -- Indexes for table `categories`
@@ -294,7 +295,8 @@ ALTER TABLE `progress`
 ALTER TABLE `questions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `category_id` (`category_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `quiz_id` (`quiz_id`);
 
 --
 -- Indexes for table `quizzes`
@@ -342,7 +344,7 @@ ALTER TABLE `answers`
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `leaderboard`
@@ -372,13 +374,13 @@ ALTER TABLE `questions`
 -- AUTO_INCREMENT for table `quizzes`
 --
 ALTER TABLE `quizzes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `session_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -401,7 +403,10 @@ ALTER TABLE `analytics`
 -- Constraints for table `answers`
 --
 ALTER TABLE `answers`
-  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `questions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `answers_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `answers_ibfk_3` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `answers_ibfk_4` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `categories`
@@ -430,7 +435,8 @@ ALTER TABLE `progress`
 --
 ALTER TABLE `questions`
   ADD CONSTRAINT `questions_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `questions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `questions_ibfk_3` FOREIGN KEY (`quiz_id`) REFERENCES `quizzes` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `quizzes`
