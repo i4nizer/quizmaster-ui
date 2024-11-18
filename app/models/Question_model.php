@@ -19,8 +19,8 @@ class Question_model extends Model
         
         # Set data for INSERT
         $data = [
-            'user_id' => $userId,
-            'category_id' => $categoryId,
+            'user_id' => $user_id,
+            'category_id' => $category_id,
             'number' => $number,
             'text' => $text,
         ];
@@ -53,7 +53,7 @@ class Question_model extends Model
         return $res ? $res : false;
     }
 
-    public function update_user_one($user_id, $category_id, $number = null, $text = null)
+    public function update_user_one($question_id, $user_id, $category_id, $number = null, $text = null)
     {
         # Create update data
         $data = [];
@@ -66,7 +66,7 @@ class Question_model extends Model
         $this->db->transaction();
 
         # Update it
-        $res = $this->db->table('questions')->where('user_id = ? AND category_id = ?', [$user_id, $category_id])->update($data);
+        $res = $this->db->table('questions')->where('user_id = ? AND category_id = ? AND question_id = ?', [$user_id, $category_id, $question_id])->update($data);
 
         # If $res is not null means all goods
         if ($res) {
