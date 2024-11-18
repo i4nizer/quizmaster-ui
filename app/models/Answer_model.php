@@ -2,7 +2,7 @@
 defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed');
 
 
-class Category_model extends Model
+class Answer_model extends Model
 {
 
     /** Init database access. */
@@ -12,28 +12,79 @@ class Category_model extends Model
         $this->call->database();
     }
 
-    /** Requires: question_id, text, is_correct */
     public function create($question_id, $text, $is_correct)
     {
+        # Transact allows rollback
+        $this->db->transaction();
+        
+        # Set data for INSERT
+        $data = [
+            'question_id' => $question_id,
+            'text' => $text,
+            'is_correct' => $is_correct,
+        ];
 
+        # Do it
+        $res = $this->db->table('answers')->insert($data);
+
+        # If $res is not null means all goods
+        if ($res) {
+            
+            # Commit and return the id of the category
+            $this->db->commit();
+            return $this->db->last_id();
+        } 
+        # If $res is null means not inserted
+        else {
+
+            # Unsuccessful, rollback then return false
+            $this->db->roll_back();
+            return false;
+        }
     }
     
-    /** Requires: user_id, category_id, question_id, text, is_correct */
-    public function get_user_category_question_all(/** Put required params here */)
+    public function get_user_category_question_all($user_id, $category_id, $question_id, $text, $is_correct)
     {
+        # Get all
+        $res = $this->db->table('answers')->where('user_id = ? AND category_id = ? AND question_id = ? AND text = ? AND is_correct = ?', [$user_id, $category_id, $question_id, $text, $is_correct])->get_all();
 
+        # Means if $res exists then return it, else return false
+        return $res ? $res : false;
     }
 
-    /** Requires: answer_id, user_id, category_id, question_id, text, is_correct */
-    public function update_user_category_question_one(/** Put required params here */)
+    public function update_user_category_question_one($answer_id, $user_id, $category_id, $question_id, $text, $is_correct)
     {
-
-    }
-
-    /** Requires: answer_id, user_id, category_id, question_id */
-    public function delete_user_category_question_one(/** Put required params here */)
-    {
+        # Create update data
+        $data = [];
         
+        # Start a Transact
+        $this->db->transaction();
+
+        # Update it
+        $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ? AND text = ? AND is_correct = ?', [$answer_id, $user_id, $category_id, $question_id, $text, $is_correct])->update($data);
+
+        # If $res is not null means all goods
+        if ($res) {
+            # Commit and return the id of the category
+            $this->db->commit();
+            return $this->db->last_id();
+        }
+        # If $res is null means not inserted
+        else {
+
+            # Unsuccessful, rollback then return false
+            $this->db->roll_back();
+            return false;
+        }
+    }
+
+    public function delete_user_category_question_one($answer_id, $user_id, $category_id, $question_id)
+    {
+                # Delete Category
+                $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ?', [$answer_id, $user_id, $category_id, $question_id])->delete();
+
+                # Give $res if it has else false
+                return $res ? $res : false;
     }
 
 }
