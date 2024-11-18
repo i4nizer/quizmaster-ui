@@ -1,8 +1,9 @@
-<?php include APP_DIR . 'views/templates/header.php'; ?>
+<?php include APP_DIR . 'views/templates/head.php'; ?>
 
 <body>
     <div id="app">
-        <?php include APP_DIR . 'views/templates/nav.php'; ?>
+        <?php include APP_DIR . 'views/templates/header.php'; ?>
+        <?php include APP_DIR . 'views/templates/drawer.php'; ?>
         <main class="mt-3 pt-3">
             <div class="container">
                 <div class="row justify-content-center">
@@ -44,7 +45,7 @@
 
                                 <!-- Quiz Creation Form -->
                                 <?php include APP_DIR . 'views/templates/quiz/create_form.php'; ?>
-                                
+
                                 <!-- Quiz List -->
                                 <?php include APP_DIR . 'views/templates/quiz/quiz_list.php'; ?>
 
@@ -64,8 +65,6 @@
         </main>
     </div>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script> -->
-    <script src="<?= base_url(); ?>public/js/jquery.js"></script>
     <script src="<?= base_url(); ?>public/js/quiz.js"></script>
 
 </body>

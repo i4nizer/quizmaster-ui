@@ -45,21 +45,46 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 $router->get('/', 'Auth');
 
-$router->group('/home', function() use ($router) {
-    $router->get('/', 'Home');
+$router->group('/user', function() use ($router) {
+
+    $router->get('/', 'Page::user_dashboard');
+    $router->get('/dashboard', 'Page::user_dashboard');
+    $router->get('/profile', 'Page::user_profile');
     
-    $router->group('/quiz', function() use ($router) {
+    $router->group('/quizzes', function () use ($router) {
+        
+        $router->get('/', 'Page::user_quizzes');
+        $router->get('/quiz/{quizId}', 'Page::user_quizzes_quiz');
+
+    });
+
+    $router->get('/settings', 'Page::user_settings');
+
+    $router->group('/quiz', function () use ($router) {
+
         $router->get('/', 'Quiz::get');
         $router->post('/', 'Quiz::post');
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
+
+        $router->group('/category', function () use ($router) {
+
+            $router->get('/', 'Category::get');
+            $router->post('/', 'Category::post');
+            $router->get('/{quizId}', 'Category::get_quiz');
+
+        });
+
     });
+
 });
 
 $router->group('/auth', function() use ($router) {
+    
     $router->match('/register', 'Auth::register', ['POST', 'GET']);
     $router->match('/login', 'Auth::login', ['POST', 'GET']);
     $router->get('/logout', 'Auth::logout');
     $router->match('/password-reset', 'Auth::password_reset', ['POST', 'GET']);
     $router->match('/set-new-password', 'Auth::set_new_password', ['POST', 'GET']);
+    
 });
