@@ -51,12 +51,9 @@ $router->group('/user', function() use ($router) {
     $router->get('/dashboard', 'Page::user_dashboard');
     $router->get('/profile', 'Page::user_profile');
     
-    $router->group('/quizzes', function () use ($router) {
-        
-        $router->get('/', 'Page::user_quizzes');
-        $router->get('/quiz/{quizId}', 'Page::user_quizzes_quiz');
-
-    });
+    $router->get('/quizzes', 'Page::user_quizzes');
+    $router->get('/quizzes/quiz/{quizId}', 'Page::user_quizzes_quiz');
+    $router->get('/quizzes/quiz/{quizId}/category/{categoryId}', 'Page::user_quizzes_quiz_category');
 
     $router->get('/settings', 'Page::user_settings');
 
@@ -71,9 +68,14 @@ $router->group('/user', function() use ($router) {
 
             $router->get('/', 'Category::get');
             $router->post('/', 'Category::post');
-            $router->get('/{quizId}', 'Category::get_quiz');
+            $router->patch('/', 'Category::patch');
+            $router->delete('/', 'Category::delete');
 
         });
+
+        $router->get('/{quizId}', 'Quiz::get');
+        $router->get('/{quizId}/category', 'Category::get_quiz');
+        $router->get('/{quizId}/category/{categoryId}', 'Category::get_quiz_category');
 
     });
 

@@ -19,7 +19,7 @@ class Category extends Controller
         $userId = get_user_id();
 
         # Get all categories of the user
-        $categories = $this->cat->get_user_all($userId);
+        $categories = $this->cat->get_user_categories($userId);
 
         # Make a header indicating that I will send a JSON
         header('Content-Type: application/json');
@@ -35,13 +35,29 @@ class Category extends Controller
         $userId = get_user_id();
 
         # Get all categories of a quiz of a user
-        $categories = $this->cat->get_user_quiz_all($userId, $quizId);
+        $categories = $this->cat->get_user_quiz_categories($userId, $quizId);
 
         # Make a header indicating that I will send a JSON
         header('Content-Type: application/json');
 
         # Now send the JSON after encoding it from an assoc array
         echo json_encode($categories ? $categories : []);
+    }
+    
+    /** Get all categories of a quiz of logged-in user */
+    public function get_quiz_category($quizId, $categoryId)
+    {
+        # Currently logged in user
+        $userId = get_user_id();
+
+        # Get all categories of a quiz of a user
+        $category = $this->cat->get_user_quiz_category($userId, $quizId, $categoryId);
+
+        # Make a header indicating that I will send a JSON
+        header('Content-Type: application/json');
+
+        # Now send the JSON after encoding it from an assoc array
+        echo json_encode($category ? $category : []);
     }
 
     /** POST a category */
@@ -54,6 +70,8 @@ class Category extends Controller
             $userId = get_user_id();
             $quizId = $this->io->post('quiz_id');
             $name = $this->io->post('name');
+            $description = $this->io->post('description');
+            $description = $description ? $description : null;
 
             # Validate (requires category name)
             $this->form_validation
@@ -66,13 +84,13 @@ class Category extends Controller
             if ($this->form_validation->run() != false) {
 
                 # Let's save the category
-                $categoryId = $this->cat->create($userId, $quizId, $name);
+                $categoryId = $this->cat->create($userId, $quizId, $name, $description);
 
                 # If all goods
                 if ($categoryId) {
 
                     # Send the category details
-                    $this->json_category($userId, $categoryId, $name);
+                    $this->json_category($userId, $quizId, $categoryId, $name, $description);
                 }
                 # Internal/DB error
                 else $this->error('Failed to create new category.', 500);
@@ -98,17 +116,19 @@ class Category extends Controller
             if (!isset($data['id']) && !$data['id']) return $this->error('Category ID is required.');
             
             # Nothing to update
-            if (!isset($data['name'])) return $this->error('No data provided in the patch body.');
+            if (!isset($data['name']) && !isset($data['description'])) return $this->error('No data provided in the patch body.');
 
             # Needs further validation of name & description
 
             # Get data
             $userId = get_user_id();
+            $quizId = $data['quiz_id'];
             $categoryId = $data['id'];
             $name = isset($data['name']) ? $data['name'] : null;
+            $description = isset($data['description']) ? $data['description'] : null;
 
             # Apply patch
-            $patched = $this->cat->update_user_one($userId, $categoryId, $name);
+            $patched = $this->cat->update_user_category($userId, $quizId, $categoryId, $name, $description);
 
             # Send patched
             if ($patched) echo "Category updated successfully.";
@@ -138,7 +158,7 @@ class Category extends Controller
 
             # Use user ID and category ID to delete
             $userId = get_user_id();
-            $deleted = $this->cat->delete_user_one($userId, $data['quiz_id'], $data['id']);
+            $deleted = $this->cat->delete_user_category($userId, $data['quiz_id'], $data['id']);
 
             # Send deleted
             if ($deleted) echo 'Category deleted successfully.';
@@ -163,12 +183,14 @@ class Category extends Controller
     }
 
     /** Craft and send json encoded category. */
-    protected function json_category($userId, $categoryId, $name)
+    protected function json_category($userId, $quizId, $categoryId, $name, $description = null)
     {
         $category = [
-            'user_id' => $userId,
             'id' => $categoryId,
+            'user_id' => $userId,
+            'quiz_id' => $quizId,
             'name' => $name,
+            'description' => $description ?? '',
         ];
 
         header('Content-Type: application/json');

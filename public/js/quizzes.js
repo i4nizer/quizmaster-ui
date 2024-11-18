@@ -9,7 +9,7 @@ $(async () => {
                 <input class="id" type="hidden" name="id" value="${id}">
                 <div class="title-box d-flex gap-2">
                     <input class="title border rounded w-100 p-2" type="text" name="title" value="${title}">
-                    <a class="btn btn-primary btn-open" href="/user/quizzes/quiz/${id}">Open</a>
+                    <a class="btn btn-primary btn-open" href="/index.php/user/quizzes/quiz/${id}">Open</a>
                     <button class="btn btn-danger btn-delete">Delete</button>
                 </div>
                 <textarea style="display: none" class="description w-100 border rounded p-2" rows="1" name="description" placeholder="Quiz Description">${description}</textarea>
@@ -28,16 +28,16 @@ $(async () => {
 
     
     // UPDATE Quiz when Changed
-    $('#quiz-list').on('change', '.title, .description', async (event) => {
+    $('#quiz-list').on('change', '.quiz-item .title, .quiz-item .description', async (event) => {
 
         // Get the Quiz Item
-        const quizListItem = $(event.target).parent()
+        const quizListItem = $(event.target).closest('.quiz-item')
         
         // Access id, title, description
         const data = {
-            id: quizListItem.children('.id').val(),
+            id: quizListItem.find('.id').val(),
             title: quizListItem.find('.title').val(),
-            description: quizListItem.children('.description').val(),
+            description: quizListItem.find('.description').val(),
         }
         
         // Craft Request
@@ -101,6 +101,7 @@ $(async () => {
         await fetch('/user/quiz', req)
             .then(res => res.json())
             .then(data => addQuizItem(data.id, data.title, data.description))
+            .then(() => console.log('Quiz created successfully.'))
             .catch(err => console.log(err))
     })
 

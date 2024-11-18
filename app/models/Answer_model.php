@@ -80,11 +80,11 @@ class Answer_model extends Model
 
     public function delete_user_category_question_one($answer_id, $user_id, $category_id, $question_id)
     {
-                # Delete Category
-                $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ?', [$answer_id, $user_id, $category_id, $question_id])->delete();
+        # Delete Category
+        $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ?', [$answer_id, $user_id, $category_id, $question_id])->delete();
 
-                # Give $res if it has else false
-                return $res ? $res : false;
+        # Give $res if it has else false
+        return $res ? $res : false;
     }
 
 }

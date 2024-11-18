@@ -30,6 +30,8 @@
 
     </main>
 
-    <body>
+    <script defer src="<?= base_url() ?>public/js/quizzes.js"></script>
 
-        </html>
+</body>
+
+</html>

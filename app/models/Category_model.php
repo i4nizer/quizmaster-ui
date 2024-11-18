@@ -13,7 +13,7 @@ class Category_model extends Model
     }
 
     /** Create category */
-    public function create($userId, $quizId, $name)
+    public function create($userId, $quizId, $name, $description = null)
     {
         # Transact allows rollback
         $this->db->transaction();
@@ -24,6 +24,9 @@ class Category_model extends Model
             'quiz_id' => $quizId,
             'name' => $name,
         ];
+
+        # Optional description
+        if ($description) $data['description'] = $description;
 
         # Do it
         $res = $this->db->table('categories')->insert($data);
@@ -45,7 +48,7 @@ class Category_model extends Model
     }
 
     /** RETRIEVE all categories of the user. */
-    public function get_user_all($userId)
+    public function get_user_categories($userId)
     {
         # Get all
         $res = $this->db->table('categories')->where('user_id', $userId)->get_all();
@@ -55,7 +58,7 @@ class Category_model extends Model
     }
 
     /** RETRIEVE all categories of a quiz of the user. */
-    public function get_user_quiz_all($userId, $quizId)
+    public function get_user_quiz_categories($userId, $quizId)
     {
         # Query
         $res = $this->db->table('categories')->where('user_id = ? AND quiz_id = ?', [$userId, $quizId])->get_all();
@@ -63,15 +66,26 @@ class Category_model extends Model
         # Means if $res exists then return it, else return false
         return $res ? $res : false;
     }
+    
+    /** RETRIEVE all categories of a quiz of the user. */
+    public function get_user_quiz_category($userId, $quizId, $categoryId)
+    {
+        # Query
+        $res = $this->db->table('categories')->where('id = ? AND user_id = ? AND quiz_id = ?', [$categoryId, $userId, $quizId])->get();
+
+        # Means if $res exists then return it, else return false
+        return $res ? $res : false;
+    }
 
     /** UPDATE a category */
-    public function update_user_one($userId, $quizId, $categoryId, $name = null)
+    public function update_user_category($userId, $quizId, $categoryId, $name = null, $description = null)
     {
         # Create update data
         $data = [];
         
-        # Description is optional so only if it exists, add it
+        # Name and Description is optional so only if it exists, add it
         if ($name != null) $data[ 'name' ] = $name;
+        if ($description != null) $data[ 'description' ] = $description;
         
         # Start a Transact
         $this->db->transaction();
@@ -84,7 +98,7 @@ class Category_model extends Model
 
             # Commit and return the id of the category
             $this->db->commit();
-            return $this->db->last_id();
+            return $res;
         }
         # If $res is null means not inserted
         else {
@@ -96,7 +110,7 @@ class Category_model extends Model
     }
 
     /** Hard Delete Category */
-    public function delete_user_one($userId, $quizId, $categoryId)
+    public function delete_user_category($userId, $quizId, $categoryId)
     {
         # Delete Category
         $res = $this->db->table('categories')->where('id = ? AND user_id = ? AND quiz_id = ?', [$categoryId, $userId, $quizId])->delete();

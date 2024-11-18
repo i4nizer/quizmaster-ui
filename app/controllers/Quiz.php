@@ -13,17 +13,17 @@ class Quiz extends Controller
     }
 
     /** Get quizzes of the currently logged-in user. */
-    public function get()
+    public function get($quizId = null)
     {
         # Get current user
         $userId = get_user_id();
 
         # Only get user's quizzes
-        $res = $this->quiz->get_user_all($userId);
+        $quizzes = $quizId ? $this->quiz->get_user_quiz($userId, $quizId) : $this->quiz->get_user_quizzes($userId);
 
         # Respond like an api
         header('Content-Type: application/json');
-        echo json_encode($res);
+        echo json_encode($quizzes ? $quizzes : []);
     }
 
     /** Create a quiz based on current user. */
@@ -73,7 +73,7 @@ class Quiz extends Controller
             $data = json_decode($raw, true);
 
             # Quiz ID required
-            if (!isset($data['id']) && $data['id'] !== '') return $this->error('Quiz ID is required in the patch body.');
+            if (!isset($data['id'])) return $this->error('Quiz ID is required in the patch body.');
 
             # Nothing to update
             if (!isset($data['title']) && !isset($data['description'])) return $this->error('No data provided in the patch body.');
@@ -101,7 +101,7 @@ class Quiz extends Controller
             $description = isset($data['description']) ? $data['description'] : null;
 
             # Apply patch
-            $patched = $this->quiz->update_user_one($userId, $quizId, $title, $description);
+            $patched = $this->quiz->update_user_quiz($userId, $quizId, $title, $description);
 
             # Send quiz
             if ($patched) echo "Quiz updated successfully.";
@@ -128,7 +128,7 @@ class Quiz extends Controller
 
             # Use user ID and quiz ID to delete
             $userId = get_user_id();
-            $deleted = $this->quiz->delete_user_one($userId, $data['id']);
+            $deleted = $this->quiz->delete_user_quiz($userId, $data['id']);
 
             # Send quiz
             if ($deleted) echo 'Quiz deleted successfully.';

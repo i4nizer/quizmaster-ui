@@ -19,7 +19,7 @@ class Question extends Controller
         $user_id = get_user_id();
 
         # Get all categories of the user
-        $questions = $this->question->get_user_category_all($user_id, $category_id);
+        $questions = $this->question->get_user_category_questions($user_id, $category_id);
 
         # Make a header indicating that I will send a JSON
         header('Content-Type: application/json');
@@ -104,7 +104,7 @@ class Question extends Controller
             $text = isset($data['text']) ? $data['text'] : null;
 
             # Apply patch
-            $patched = $this->question->update_user_one($questionId, $userId, $categoryId, $number, $text);
+            $patched = $this->question->update_user_category($questionId, $userId, $categoryId, $number, $text);
 
             # Send patched
             if ($patched) echo "Question updated successfully.";
@@ -134,7 +134,7 @@ class Question extends Controller
 
             # Use user ID and category ID to delete
             $userId = get_user_id();
-            $deleted = $this->question->delete_user_one($data['id'], $userId, $data['category_id'] );
+            $deleted = $this->question->delete_user_category($data['id'], $userId, $data['category_id'] );
 
             # Send deleted
             if ($deleted) echo 'Question deleted successfully.';

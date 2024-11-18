@@ -33,17 +33,15 @@ class Page extends Controller
     {
         if (!$quizId) return redirect('user/quizzes');
 
-        # Get quiz of the user
-        $userId = get_user_id();
-        $res = $this->quiz->get_user_one($userId, $quizId);
+        $this->call->view('user/quiz');
+    }
+    
+    public function user_quizzes_quiz_category($quizId, $categoryId)
+    {
+        if (!$quizId) return redirect('user/quizzes');
+        if (!$categoryId) return redirect("user/quizzes/quiz/$quizId");
 
-        # User doesn't exists
-        // if (!$res) {
-        //     echo "No Quizzes Found";
-        //     return;
-        // }        
-
-        $this->call->view('user/quizzes/quiz');
+        $this->call->view('user/category');
     }
     
     public function user_settings()

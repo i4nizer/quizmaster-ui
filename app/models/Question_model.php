@@ -44,7 +44,7 @@ class Question_model extends Model
         }
     }
 
-    public function get_user_category_all($user_id, $category_id)
+    public function get_user_category_questions($user_id, $category_id)
     {
         # Get all
         $res = $this->db->table('questions')->where('user_id = ? and category_id = ?', [$user_id, $category_id])->get_all();
@@ -53,7 +53,7 @@ class Question_model extends Model
         return $res ? $res : false;
     }
 
-    public function update_user_one($question_id, $user_id, $category_id, $number = null, $text = null)
+    public function update_user_category($question_id, $user_id, $category_id, $number = null, $text = null)
     {
         # Create update data
         $data = [];
@@ -84,7 +84,7 @@ class Question_model extends Model
         }
     }
 
-    public function delete_user_one($question_id, $user_id, $category_id)
+    public function delete_user_category($question_id, $user_id, $category_id)
     {
         # Delete Category
         $res = $this->db->table('questions')->where('id = ? AND user_id = ? AND category_id = ?', [$question_id, $user_id, $category_id])->delete();

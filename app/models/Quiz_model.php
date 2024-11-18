@@ -34,36 +34,39 @@ class Quiz_model extends Model
     }
 
     /** Get all quizzes. */
-    public function get_all($deleted = false)
+    public function get_quizzes($deleted = false)
     {
-        if ($deleted) return $this->db->table('quizzes')->where_not_null('deleted_at')->get_all();
+        if ($deleted === true) return $this->db->table('quizzes')->where_not_null('deleted_at')->get_all();
+        else if ($deleted === null) return $this->db->table('quizzes')->get_all();
         else return $this->db->table('quizzes')->where_null('deleted_at')->get_all();
     }
 
     /** Get specific quiz. */
-    public function get_one($quizId, $deleted = false)
+    public function get_quiz($quizId, $deleted = false)
     {
-        if ($deleted) return $this->db->table('quizzes')->where('id', $quizId)->where_not_null('deleted_at')->get();
+        if ($deleted === true) return $this->db->table('quizzes')->where('id', $quizId)->where_not_null('deleted_at')->get();
+        else if ($deleted === null) return $this->db->table('quizzes')->where('id', $quizId)->get();
         else return $this->db->table('quizzes')->where('id', $quizId)->where_null('deleted_at')->get();
     }
 
     /** Get all quizzes created by the user. */
-    public function get_user_all($userId, $deleted = false)
+    public function get_user_quizzes($userId, $deleted = false)
     {
-        if ($deleted) return $this->db->table('quizzes')->where('creator_id', $userId)->where_not_null('deleted_at')->get_all();
+        if ($deleted === true) return $this->db->table('quizzes')->where('creator_id', $userId)->where_not_null('deleted_at')->get_all();
+        else if ($deleted === null) return $this->db->table('quizzes')->where('creator_id', $userId)->get_all();
         else return $this->db->table('quizzes')->where('creator_id', $userId)->where_null('deleted_at')->get_all();
     }
 
     /** Get a specific quiz created by the user. */
-    public function get_user_one($userId, $quizId, $deleted = false)
+    public function get_user_quiz($userId, $quizId, $deleted = false)
     {
-        if ($deleted === true) return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where('deleted_at != NULL')->get();
+        if ($deleted === true) return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where_not_null('deleted_at')->get();
         else if ($deleted === null) return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->get();
-        else return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where('deleted_at = NULL')->get();
+        else return $this->db->table('quizzes')->where('id = ? AND creator_id = ?', [$quizId, $userId])->where_null('deleted_at')->get();
     }
 
     /** Modifies specific user's quiz. */
-    public function update_user_one($userId, $quizId, $title = null, $description = null)
+    public function update_user_quiz($userId, $quizId, $title = null, $description = null)
     {
         $this->db->transaction();
         $data = [];
@@ -83,7 +86,7 @@ class Quiz_model extends Model
     }
 
     /** Marks the tuple as deleted. */
-    public function delete_user_one($userId, $quizId)
+    public function delete_user_quiz($userId, $quizId)
     {
         $this->db->transaction();
         $data = ['deleted_at' => date('Y-m-d H:i:s')];
