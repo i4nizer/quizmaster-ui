@@ -46,7 +46,7 @@ class Answer_model extends Model
     public function get_user_category_question_all($user_id, $category_id, $question_id, $text, $is_correct)
     {
         # Get all
-        $res = $this->db->table('answers')->where('user_id = ? AND category_id = ? AND question_id = ? AND text = ? AND is_correct = ?', [$user_id, $category_id, $question_id, $text, $is_correct])->get_all();
+        $res = $this->db->table('answers')->where('user_id = ? AND category_id = ? AND question_id = ?', [$user_id, $category_id, $question_id])->get_all();
 
         # Means if $res exists then return it, else return false
         return $res ? $res : false;
@@ -61,7 +61,7 @@ class Answer_model extends Model
         $this->db->transaction();
 
         # Update it
-        $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ? AND text = ? AND is_correct = ?', [$answer_id, $user_id, $category_id, $question_id, $text, $is_correct])->update($data);
+        $res = $this->db->table('answers')->where('answer_id = ? AND user_id = ? AND category_id = ? AND question_id = ?', [$answer_id, $user_id, $category_id, $question_id])->update($data);
 
         # If $res is not null means all goods
         if ($res) {
