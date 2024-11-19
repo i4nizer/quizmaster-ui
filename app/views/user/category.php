@@ -26,26 +26,27 @@
             </div>
         </div>
 
-        <!-- Question Creation -->
-        <div class="card w-25">
-            <div class="card-header">Make Challenging Questions</div>
-            <div class="card-body d-flex flex-column gap-2">
+        <!-- Question Items Here -->
+        <div class="question-list w-75 d-flex flex-column gap-2">
+            
+            <div class="question-item card w-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <div class="question-box w-75">
+                        <input class="number bg-light border rounded p-2" style="" type="number" name="number">
+                        <input class="text bg-light w-50 border rounded p-2" type="text" name="text">
+                    </div>
+                    <div class="move-box">
+                        <button class="btn btn-secondary"><i class="bi bi-arrow-down"></i></button>
+                        <button class="btn btn-primary"><i class="bi bi-arrow-up"></i></button>
+                    </div>
+                </div>
+                <div class="answer-list card-body p-2 d-flex flex-column">
 
-                <!-- Question Form -->
-                <?php include APP_DIR . 'views/templates/question/question_form.php' ?>
+                    <!-- Correct Answers Here -->
 
+                </div>
             </div>
-        </div>
 
-        <!-- Question Lists -->
-        <div class="card w-50">
-            <div class="card-header">Questions</div>
-            <div class="card-body d-flex flex-column gap-2">
-
-                <!-- Question List -->
-
-
-            </div>
         </div>
 
 

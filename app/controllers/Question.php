@@ -34,11 +34,18 @@ class Question extends Controller
         # Check if POST is made
         if ($this->form_validation->submitted()) {
 
+            
             # Get data
             $userId = get_user_id();
+            $quizId = $this->io->post('quiz_id');
             $categoryId = $this->io->post('category_id');
-            $number = $this->io->post('number');
             $text = $this->io->post('text');
+            $type = $this->io->post('type');
+            $type ??= 'Identification';
+            
+            # Init last number for append
+            $res = $this->question->get_user_quiz_category_last_question_number($userId, $quizId, $categoryId);
+            $number = $res['last_question_number'] ? $res['last_question_number'] + 1 : 1;
 
             # Validate (requires category name)
             $this->form_validation
@@ -50,14 +57,14 @@ class Question extends Controller
             # Check for errors
             if ($this->form_validation->run() != false) {
 
-                # Let's save the category
-                $questionId = $this->question->create($userId, $categoryId, $number, $text);
+                # Let's save the question
+                $questionId = $this->question->create($userId, $quizId, $categoryId, $number, $text, $type);
 
                 # If all goods
                 if ($questionId) {
 
-                    # Send the category details
-                    $this->json_question($questionId, $userId, $categoryId, $number, $text);
+                    # Send the question details
+                    $this->json_question($questionId, $userId, $quizId, $categoryId, $number, $text, $type);
                 }
                 # Internal/DB error
                 else $this->error('Failed to create new category.', 500);
@@ -82,16 +89,19 @@ class Question extends Controller
             # Require: id, user_id, name
             if (!isset($data['id']) && !$data['id']) return $this->error('Question Id is required.');
             
-            # Nothing to update
+            # Required
             if (!isset($data['user_id'])) return $this->error('User Id is required.');
+            
+            # Required
+            if (!isset($data['quiz_id'])) return $this->error('Quiz Id is required.');
 
-            # Nothing to update
+            # Required
             if (!isset($data['category_id'])) return $this->error('Category Id is required.');
 
-            # Nothing to update
+            # Required
             if (!isset($data['number'])) return $this->error('number is required.');
 
-            # Nothing to update
+            # Required
             if (!isset($data['text'])) return $this->error('text is required.');
 
             # Needs further validation of name & description
@@ -99,12 +109,13 @@ class Question extends Controller
             # Get data
             $questionId = $data['id'];
             $userId = get_user_id();
+            $quizId = $data['quiz_id'];
             $categoryId = $data['category_id'];
             $number = isset($data['number']) ? $data['number'] : null;
             $text = isset($data['text']) ? $data['text'] : null;
 
             # Apply patch
-            $patched = $this->question->update_user_category($questionId, $userId, $categoryId, $number, $text);
+            $patched = $this->question->update_user_category($questionId, $userId, $quizId, $categoryId, $number, $text);
 
             # Send patched
             if ($patched) echo "Question updated successfully.";
@@ -162,13 +173,16 @@ class Question extends Controller
     }
 
     /** Craft and send json encoded category. */
-    protected function json_question($questionId, $userId, $categoryId, $number, $text)
+    protected function json_question($questionId, $userId, $quizId, $categoryId, $number, $text, $type = null)
     {
         $question = [
+            'id' => $questionId,
             'user_id' => $userId,
-            'id' => $categoryId,
+            'quiz_id' => $quizId,
+            'category_id' => $categoryId,
             'number' => $number,
             'text' => $text,
+            'type' => $type ?? 'Identification',
         ];
 
         header('Content-Type: application/json');

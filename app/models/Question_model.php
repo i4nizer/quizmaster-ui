@@ -12,7 +12,8 @@ class Question_model extends Model
         $this->call->database();
     }
 
-    public function create($user_id, $category_id, $number, $text)
+    /** Reference question table for the fields/params */
+    public function create($user_id, $quiz_id, $category_id, $number, $text, $type = null)
     {
         # Transact allows rollback
         $this->db->transaction();
@@ -20,10 +21,14 @@ class Question_model extends Model
         # Set data for INSERT
         $data = [
             'user_id' => $user_id,
+            'quiz_id' => $quiz_id,
             'category_id' => $category_id,
             'number' => $number,
             'text' => $text,
         ];
+
+        # Optional
+        if ($type) $data['type'] = $type;
 
         # Do it
         $res = $this->db->table('questions')->insert($data);
@@ -44,10 +49,26 @@ class Question_model extends Model
         }
     }
 
+    /** Get user-quiz-category questions */
     public function get_user_category_questions($user_id, $category_id)
     {
         # Get all
-        $res = $this->db->table('questions')->where('user_id = ? and category_id = ?', [$user_id, $category_id])->get_all();
+        $res = $this->db->table('questions')
+            ->where('user_id = ? and category_id = ?', [$user_id, $category_id])
+            ->get_all();
+
+        # Means if $res exists then return it, else return false
+        return $res ? $res : false;
+    }
+
+    /** Get latest number of user-quiz-category question */
+    public function get_user_quiz_category_last_question_number($user_id, $quiz_id, $category_id)
+    {
+        # Get it
+        $res = $this->db->table('questions')
+            ->select_max('number', 'last_question_number')
+            ->where('user_id = ? AND quiz_id = ? AND category_id = ?', [$user_id, $quiz_id, $category_id])
+            ->get();
 
         # Means if $res exists then return it, else return false
         return $res ? $res : false;
@@ -66,7 +87,9 @@ class Question_model extends Model
         $this->db->transaction();
 
         # Update it
-        $res = $this->db->table('questions')->where('user_id = ? AND category_id = ? AND question_id = ?', [$user_id, $category_id, $question_id])->update($data);
+        $res = $this->db->table('questions')
+            ->where('user_id = ? AND category_id = ? AND question_id = ?', [$user_id, $category_id, $question_id])
+            ->update($data);
 
         # If $res is not null means all goods
         if ($res) {

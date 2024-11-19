@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 18, 2024 at 05:40 PM
+-- Generation Time: Nov 19, 2024 at 08:11 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -138,6 +138,13 @@ CREATE TABLE `questions` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `questions`
+--
+
+INSERT INTO `questions` (`id`, `user_id`, `quiz_id`, `category_id`, `number`, `text`, `type`, `created_at`) VALUES
+(1, 1, 15, 18, 1, 'First Question', 'Identification', '2024-11-19 03:59:57');
+
 -- --------------------------------------------------------
 
 --
@@ -194,7 +201,8 @@ INSERT INTO `sessions` (`session_id`, `user_id`, `browser`, `ip`, `session_data`
 (12, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '91b76ff986dd0882a5a3eb4d7d7895a03859e4db4f3b80c510a8009b0cc6c44f', '2024-11-16 16:56:28'),
 (13, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', 'f448a8c3c78641be9057ba3babdcd00d3cecd8f7d2c28296ab014abac7217cb3', '2024-11-16 16:57:14'),
 (14, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '2984c78637ccf7f19aed021039a84eccb10ee35ba5ed2983a7e578b24f3c9980', '2024-11-16 17:00:25'),
-(16, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '790f1a07a2653a29cc3e4f58386dceaa5f73291686ac0d47f4db5391cbffb5de', '2024-11-18 23:05:54');
+(16, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36', '::1', '790f1a07a2653a29cc3e4f58386dceaa5f73291686ac0d47f4db5391cbffb5de', '2024-11-18 23:05:54'),
+(17, 1, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36', '::1', '48e365151eda8f782b47e03817d0bf0fe33fe1c5db82c12fb26f5c2adb033860', '2024-11-19 10:42:09');
 
 -- --------------------------------------------------------
 
@@ -368,7 +376,7 @@ ALTER TABLE `progress`
 -- AUTO_INCREMENT for table `questions`
 --
 ALTER TABLE `questions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `quizzes`
@@ -380,7 +388,7 @@ ALTER TABLE `quizzes`
 -- AUTO_INCREMENT for table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `session_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `session_id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users`

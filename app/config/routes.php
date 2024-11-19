@@ -45,18 +45,19 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 $router->get('/', 'Auth');
 
+# USER ACCESS
 $router->group('/user', function() use ($router) {
 
+    # PAGES
     $router->get('/', 'Page::user_dashboard');
     $router->get('/dashboard', 'Page::user_dashboard');
     $router->get('/profile', 'Page::user_profile');
-    
     $router->get('/quizzes', 'Page::user_quizzes');
+    $router->get('/settings', 'Page::user_settings');
     $router->get('/quizzes/quiz/{quizId}', 'Page::user_quizzes_quiz');
     $router->get('/quizzes/quiz/{quizId}/category/{categoryId}', 'Page::user_quizzes_quiz_category');
 
-    $router->get('/settings', 'Page::user_settings');
-
+    # APIs - /user/quiz
     $router->group('/quiz', function () use ($router) {
 
         $router->get('/', 'Quiz::get');
@@ -64,6 +65,7 @@ $router->group('/user', function() use ($router) {
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
 
+        # APIs - /user/quiz/category
         $router->group('/category', function () use ($router) {
 
             $router->get('/', 'Category::get');
@@ -71,8 +73,19 @@ $router->group('/user', function() use ($router) {
             $router->patch('/', 'Category::patch');
             $router->delete('/', 'Category::delete');
 
+            # APIs - /user/quiz/category/question
+            $router->group('/question', function () use ($router) {
+
+                $router->get('/', 'Question::get');
+                $router->post('/', 'Question::post');
+                $router->patch('/', 'Question::patch');
+                $router->delete('/', 'Question::delete');
+
+            });
+
         });
 
+        # APIs - /user/quiz/{quizId}/category/{categoryId}
         $router->get('/{quizId}', 'Quiz::get');
         $router->get('/{quizId}/category', 'Category::get_quiz');
         $router->get('/{quizId}/category/{categoryId}', 'Category::get_quiz_category');
