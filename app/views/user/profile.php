@@ -1,15 +1,16 @@
+<?php defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed'); ?>
+
 <?php include APP_DIR . 'views/templates/head.php'; ?>
 
 <body>
-    <?php include APP_DIR . 'views/templates/header.php'; ?>
-    <?php include APP_DIR . 'views/templates/drawer.php'; ?>
+    <?php include APP_DIR . 'views/templates/sidenav.php'; ?>
 
-    <main class="p-5">
+    <main class="py-5 h-100" style="margin-left: 100px;">
 
-        Profile: No Content Yet
+        Profileeee
 
     </main>
 
-<body>
-    
+</body>
+
 </html>

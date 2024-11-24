@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\type;
+
 defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed');
 
 
@@ -14,39 +17,45 @@ class Page extends Controller
         $this->call->model('Quiz_model', 'quiz');
     }
 
-    public function user_dashboard()
+    public function index()
     {
-        $this->call->view('user/dashboard');
+        $this->call->view('home');
     }
-    
+
     public function user_profile()
     {
         $this->call->view('user/profile');
     }
 
-    public function user_quizzes()
+    public function user_quizzes($quizId = null)
     {
-        $this->call->view('user/quizzes');
-    }
-    
-    public function user_quizzes_quiz($quizId)
-    {
-        if (!$quizId) return redirect('user/quizzes');
+        # normal
+        if ($quizId === null) {
+            $this->call->view("user/quizzes");
+            return;
+        }
 
-        $this->call->view('user/quiz');
-    }
-    
-    public function user_quizzes_quiz_category($quizId, $categoryId)
-    {
-        if (!$quizId) return redirect('user/quizzes');
-        if (!$categoryId) return redirect("user/quizzes/quiz/$quizId");
+        # create quiz
+        if ($quizId == -1) {
+            $data = [
+                'creator_id' => get_user_id(),
+                'title' => "",
+                'description' => "",
+                'visibility' => 'Public'
+            ];
+            
+            $quizId = $this->quiz->insert($data);
+            redirect("user/quizzes/$quizId");
+                
+            return;
+        }
 
-        $this->call->view('user/category');
-    }
-    
-    public function user_settings()
-    {
-        $this->call->view('user/settings');
+        # get quiz
+        $quiz = $this->quiz->find($quizId);
+        $data["quiz"] = $quiz;
+        
+        if (gettype($quiz) !== "array") redirect("user/quizzes");
+        else $this->call->view("user/quizzes/quiz", $data);
     }
 
 }

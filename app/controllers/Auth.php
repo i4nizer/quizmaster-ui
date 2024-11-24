@@ -8,7 +8,7 @@ class Auth extends Controller {
         parent::__construct();
         if(segment(2) != 'logout') {
             if(logged_in()) {
-                redirect('user/dashboard');
+                redirect('user');
             }
         }
         $this->call->library('email');
@@ -29,7 +29,7 @@ class Auth extends Controller {
                 redirect('auth/login');
 			} else {
 				$this->lauth->set_logged_in($data);
-                redirect('user/dashboard');
+                redirect('user');
 			}
         } else {
             $this->call->view('auth/login');

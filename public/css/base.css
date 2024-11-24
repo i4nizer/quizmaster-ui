@@ -1,0 +1,79 @@
+:root {
+    /* Green */
+    --green: #4CAF50;
+
+    /* Green Lighten */
+    --green-lighten-5: #E8F5E9;
+    --green-lighten-4: #C8E6C9;
+    --green-lighten-3: #A5D6A7;
+    --green-lighten-2: #81C784;
+    --green-lighten-1: #66BB6A;
+
+    /* Green Darken */
+    --green-darken-1: #43A047;
+    --green-darken-2: #388E3C;
+    --green-darken-3: #2E7D32;
+    --green-darken-4: #1B5E20;
+
+    /* Green Accent */
+    --green-accent-1: #B9F6CA;
+    --green-accent-2: #69F0AE;
+    --green-accent-3: #00E676;
+    --green-accent-4: #00C853;
+}
+
+/* Green */
+.bg-green { background-color: #4CAF50; }
+.text-green { color: #4CAF50; }
+
+/* Green Lighten */
+.bg-green-lighten-5 { background-color: #E8F5E9; }
+.text-green-lighten-5 { color: #E8F5E9; }
+.bg-green-lighten-4 { background-color: #C8E6C9; }
+.text-green-lighten-4 { color: #C8E6C9; }
+.bg-green-lighten-3 { background-color: #A5D6A7; }
+.text-green-lighten-3 { color: #A5D6A7; }
+.bg-green-lighten-2 { background-color: #81C784; }
+.text-green-lighten-2 { color: #81C784; }
+.bg-green-lighten-1 { background-color: #66BB6A; }
+.text-green-lighten-1 { color: #66BB6A; }
+
+/* Green Darken */
+.bg-green-darken-1 { background-color: #43A047; }
+.text-green-darken-1 { color: #43A047; }
+.bg-green-darken-2 { background-color: #388E3C; }
+.text-green-darken-2 { color: #388E3C; }
+.bg-green-darken-3 { background-color: #2E7D32; }
+.text-green-darken-3 { color: #2E7D32; }
+.bg-green-darken-4 { background-color: #1B5E20; }
+.text-green-darken-4 { color: #1B5E20; }
+
+/* Green Accent */
+.bg-green-accent-1 { background-color: #B9F6CA; }
+.text-green-accent-1 { color: #B9F6CA; }
+.bg-green-accent-2 { background-color: #69F0AE; }
+.text-green-accent-2 { color: #69F0AE; }
+.bg-green-accent-3 { background-color: #00E676; }
+.text-green-accent-3 { color: #00E676; }
+.bg-green-accent-4 { background-color: #00C853; }
+.text-green-accent-4 { color: #00C853; }
+
+
+
+
+/* ----------------------------->>> SIDE NAV <<<----------------------------- */
+#sidenav {
+    background-color: #262626;
+}
+
+#sidenav div a {
+    color: #a8a8a8;
+    font-weight: bold;
+    transition-duration: 500ms;
+}
+
+#sidenav div a:hover,
+#sidenav div a.active {
+    color: var(--green-accent-4);
+    background-color: #313131;
+}

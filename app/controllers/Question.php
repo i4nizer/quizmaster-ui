@@ -10,185 +10,126 @@ class Question extends Controller
     {
         parent::__construct();
         $this->call->model('Question_model', 'question');
+        $this->call->library('json');
     }
 
-    /** GET all categories of logged-in user */
-    public function get($category_id)
+    /** */
+    public function get($questionId)
     {
-        # Currently logged in user
-        $user_id = get_user_id();
-
-        # Get all categories of the user
-        $questions = $this->question->get_user_category_questions($user_id, $category_id);
-
-        # Make a header indicating that I will send a JSON
-        header('Content-Type: application/json');
-
-        # Now send the JSON after encoding it from an assoc array
-        echo json_encode($questions ? $questions : []);
+        $question = $this->question->find($questionId);
+        $this->json->send($question);
     }
 
-    /** POST a category */
+    /** */
+    public function get_by_quiz($quizId)
+    {
+        $questions = $this->question->get_by_quiz($quizId);
+        $this->json->send($questions);
+    }
+
     public function post()
     {
-        # Check if POST is made
-        if ($this->form_validation->submitted()) {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            $data = $this->json->read();
+            $res = $this->question->insert($data);
 
-            
-            # Get data
-            $userId = get_user_id();
-            $quizId = $this->io->post('quiz_id');
-            $categoryId = $this->io->post('category_id');
-            $text = $this->io->post('text');
-            $type = $this->io->post('type');
-            $type ??= 'Identification';
-            
-            # Init last number for append
-            $res = $this->question->get_user_quiz_category_last_question_number($userId, $quizId, $categoryId);
-            $number = $res['last_question_number'] ? $res['last_question_number'] + 1 : 1;
-
-            # Validate (requires category name)
-            $this->form_validation
-                ->name('text')
-                ->required()
-                ->min_length(2, 'Question text must not be less than 2 characters.')
-                ->max_length(100, 'Question text must not be more than 100 characters.');
-
-            # Check for errors
-            if ($this->form_validation->run() != false) {
-
-                # Let's save the question
-                $questionId = $this->question->create($userId, $quizId, $categoryId, $number, $text, $type);
-
-                # If all goods
-                if ($questionId) {
-
-                    # Send the question details
-                    $this->json_question($questionId, $userId, $quizId, $categoryId, $number, $text, $type);
-                }
-                # Internal/DB error
-                else $this->error('Failed to create new category.', 500);
+            if ($res) {
+                $data["id"] = $res;
+                $this->json->send($data);
             }
-            # Means bad request
-            else $this->error($this->form_validation->errors());
+            else $this->json->error("Failed to create question.", 500);
         }
-        # Wrong method
-        else $this->error('Request method must be POST.');
+        else $this->json->error("Incorrect request method or no data provided.");
     }
 
-    /** PATCH category */
     public function patch()
     {
-        # Check if PATCH method
-        if ($_SERVER['REQUEST_METHOD'] == 'PATCH') {
+        if ($_SERVER['REQUEST_METHOD'] == 'PATCH')
+        {
+            $data = $this->json->read();
+            $res = $this->question->update($data['id'], $data);
 
-            # Get patch data
-            $raw = file_get_contents('php://input');
-            $data = json_decode($raw, true);
-
-            # Require: id, user_id, name
-            if (!isset($data['id']) && !$data['id']) return $this->error('Question Id is required.');
-            
-            # Required
-            if (!isset($data['user_id'])) return $this->error('User Id is required.');
-            
-            # Required
-            if (!isset($data['quiz_id'])) return $this->error('Quiz Id is required.');
-
-            # Required
-            if (!isset($data['category_id'])) return $this->error('Category Id is required.');
-
-            # Required
-            if (!isset($data['number'])) return $this->error('number is required.');
-
-            # Required
-            if (!isset($data['text'])) return $this->error('text is required.');
-
-            # Needs further validation of name & description
-
-            # Get data
-            $questionId = $data['id'];
-            $userId = get_user_id();
-            $quizId = $data['quiz_id'];
-            $categoryId = $data['category_id'];
-            $number = isset($data['number']) ? $data['number'] : null;
-            $text = isset($data['text']) ? $data['text'] : null;
-
-            # Apply patch
-            $patched = $this->question->update_user_category($questionId, $userId, $quizId, $categoryId, $number, $text);
-
-            # Send patched
-            if ($patched) echo "Question updated successfully.";
-
-            # Send 500 status code for failed update
-            else $this->error('Failed to update question.', 500);
+            if ($res) $this->json->send($data);
+            else $this->json->error("Failed to update question.", 500);
         }
-        # Wrong method
-        else $this->error('PATCH method must be used.');
+        else $this->json->error("Incorrect request method or no data provided.");
     }
 
-    /** DELETE a category specific to the user. */
     public function delete()
     {
-        # DELETE METHOD ONLY
+        if ($_SERVER['REQUEST_METHOD'] == 'DELETE') 
+        {
+            $data = $this->json->read();
+            $res = $this->question->delete($data['id']);
+
+            if ($res) $this->json->send($data);
+            else $this->json->error("Failed to delete question.", 500);
+        } 
+        else $this->json->error("Incorrect request method or no data provided.");
+    }
+
+    /** */
+    public function upload()
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            $this->call->library('upload', $_FILES['file']);
+
+            $dir = 'public/images';
+            $this->upload
+                ->max_size(5)
+                ->set_dir($dir)
+                ->is_image();
+
+            if ($this->upload->do_upload()) {
+
+                $filename = $this->upload->get_filename();
+                $data = [
+                    "id" => $this->io->post('id'),
+                    "image" => $dir . "/" . $filename,
+                ];
+
+                # get the question first
+                $question = $this->question->find($data['id']);
+
+                # delete existing image file
+                if ($question["image"] && file_exists($question["image"])) unlink($question["image"]);
+
+                # add the file url
+                $res = $this->question->update($data['id'], $data);
+
+                $question["image"] = $data["image"];
+                if ($res) $this->json->send($question);
+                else $this->json->error("Failed to upload the image.", 500);
+            }
+            else {
+
+                $errors = $this->upload->get_errors();
+                $this->json->send($errors, 500);
+            }
+        } else $this->json->error('POST method must be used.');
+    }
+
+    public function unload()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
 
-            # Get patch data
-            $raw = file_get_contents('php://input');
-            $data = json_decode($raw, true);
+            # get question
+            $data = $this->json->read();
+            $question = $this->question->find($data['id']);
 
-            # Category ID required
-            if (!isset($data['id']) && $data['id'] !== '') return $this->error('Question ID is required in delete body.');
-            
-            # Quiz ID required
-            if (!isset($data['category_id']) && $data['category_id'] !== '') return $this->error('Category ID is required in delete body.');
+            # remove file
+            if (file_exists($question["image"])) unlink($question["image"]);
 
-            # Use user ID and category ID to delete
-            $userId = get_user_id();
-            $deleted = $this->question->delete_user_category($data['id'], $userId, $data['category_id'] );
+            # update question
+            $res = $this->question->update($data['id'], [ "image" => "" ]);
 
-            # Send deleted
-            if ($deleted) echo 'Question deleted successfully.';
+            $question['image'] = "";
+            if ($res) $this->json->send($question);
+            else $this->json->error("Failed to remove uploaded image.");
 
-            # Send 500 status code for failed delete
-            else $this->error('Failed to delete question.', 500);
-        }
-        # Wrong method
-        else $this->error('DELETE method must be used.');
+        } else $this->json->error('DELETE method must be used.');
     }
-
-
-
-
-
-
-
-
-
-    /** Send an error response. */
-    protected function error($msg, $code = 400)
-    {
-        http_response_code($code);
-        echo $msg;
-    }
-
-    /** Craft and send json encoded category. */
-    protected function json_question($questionId, $userId, $quizId, $categoryId, $number, $text, $type = null)
-    {
-        $question = [
-            'id' => $questionId,
-            'user_id' => $userId,
-            'quiz_id' => $quizId,
-            'category_id' => $categoryId,
-            'number' => $number,
-            'text' => $text,
-            'type' => $type ?? 'Identification',
-        ];
-
-        header('Content-Type: application/json');
-        echo json_encode($question);
-    }
-
-    
 
 }

@@ -1,36 +1,43 @@
+<?php defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed'); ?>
+
 <?php include APP_DIR . 'views/templates/head.php'; ?>
 
 <body>
-    <?php include APP_DIR . 'views/templates/header.php'; ?>
-    <?php include APP_DIR . 'views/templates/drawer.php'; ?>
+    <?php include APP_DIR . 'views/templates/sidenav.php'; ?>
 
-    <main class="p-5 m-0 d-flex flex-wrap justify-content-center gap-2">
+    <main class="p-5 h-100" style="margin-left: 100px;">
 
-        <!-- Quiz Creation Form -->
-        <div class="card w-25">
-            <div class="card-header">Start Twisting Minds</div>
-            <div class="card-body">
-
-                <!-- Quiz Form -->
-                <?php include APP_DIR . 'views/templates/quiz/quiz_form.php'; ?>
-
-            </div>
+        <div class="header mb-3">
+            <span class="fs-1">Quizzes by Quizmaster</span>
         </div>
 
-        <!-- Quizzes User Created -->
-        <div class="card w-50">
-            <div class="card-header">Keep Making Quizzes</div>
-            <div class="card-body">
+        <div class="content h-100 d-flex flex-wrap gap-2">
 
-                <!-- Quiz List -->
-                <?php include APP_DIR . 'views/templates/quiz/quiz_list.php'; ?>
-
+            <div class="card" style="width: 300px;">
+                <div class="card-header fs-4 bg-green text-white">Steps</div>
+                <div class="card-body">
+                    <span class="fs-5">Create a quiz in 3 easy steps.</span>
+                    <ol class="fs-6 mt-2">
+                        <li>Fill a the <a href="#quizcard">QuizCard</a>.</li>
+                        <li>Next save it.</li>
+                        <li>Enjoy.</li>
+                    </ol>
+                </div>
             </div>
+
+            <div class="card w-25">
+                <div class="card-header fs-4 bg-green text-white">Create Your Own!</div>
+                <div class="card-body">
+                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non nemo reprehenderit corporis fuga laudantium ipsum facilis quidem consequatur necessitatibus earum sint, obcaecati recusandae, ab quod suscipit deleniti laboriosam dolorem magnam.</p>
+                    <a class="btn-lg border-0 bg-green-accent-4 text-center text-white text-decoration-none" href="/index.php/user/quizzes/-1">Create Quiz</a>
+                </div>
+            </div>
+
+
+
         </div>
 
     </main>
-
-    <script defer src="<?= base_url() ?>public/js/quizzes.js"></script>
 
 </body>
 

@@ -49,46 +49,45 @@ $router->get('/', 'Auth');
 $router->group('/user', function() use ($router) {
 
     # PAGES
-    $router->get('/', 'Page::user_dashboard');
-    $router->get('/dashboard', 'Page::user_dashboard');
+    $router->get('/', 'Page');  
     $router->get('/profile', 'Page::user_profile');
     $router->get('/quizzes', 'Page::user_quizzes');
-    $router->get('/settings', 'Page::user_settings');
-    $router->get('/quizzes/quiz/{quizId}', 'Page::user_quizzes_quiz');
-    $router->get('/quizzes/quiz/{quizId}/category/{categoryId}', 'Page::user_quizzes_quiz_category');
-
-    # APIs - /user/quiz
+    $router->get('/quizzes/{quizId}', 'Page::user_quizzes');
+    
+    # API
     $router->group('/quiz', function () use ($router) {
 
         $router->get('/', 'Quiz::get');
         $router->post('/', 'Quiz::post');
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
+        $router->post('/upload', 'Quiz::upload');
+        $router->delete('/upload', 'Quiz::unload');
+        
+        $router->group('/question', function () use ($router) {
 
-        # APIs - /user/quiz/category
-        $router->group('/category', function () use ($router) {
+            $router->get('/', 'Question::get');
+            $router->post('/', 'Question::post');
+            $router->patch('/', 'Question::patch');
+            $router->delete('/', 'Question::delete');
+            $router->post('/upload', 'Question::upload');
+            $router->delete('/upload', 'Question::unload');
 
-            $router->get('/', 'Category::get');
-            $router->post('/', 'Category::post');
-            $router->patch('/', 'Category::patch');
-            $router->delete('/', 'Category::delete');
+            $router->group('/answer', function () use ($router) {
 
-            # APIs - /user/quiz/category/question
-            $router->group('/question', function () use ($router) {
-
-                $router->get('/', 'Question::get');
-                $router->post('/', 'Question::post');
-                $router->patch('/', 'Question::patch');
-                $router->delete('/', 'Question::delete');
+                $router->get('/', 'Answer::get');
+                $router->post('/', 'Answer::post');
+                $router->patch('/', 'Answer::patch');
+                $router->delete('/', 'Answer::delete');
 
             });
 
+            $router->get('/{questionId}/answer', 'Answer::get_by_question');
+
         });
 
-        # APIs - /user/quiz/{quizId}/category/{categoryId}
         $router->get('/{quizId}', 'Quiz::get');
-        $router->get('/{quizId}/category', 'Category::get_quiz');
-        $router->get('/{quizId}/category/{categoryId}', 'Category::get_quiz_category');
+        $router->get('/{quizId}/question', 'Question::get_by_quiz');
 
     });
 
