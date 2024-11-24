@@ -8,7 +8,7 @@
     <main class="p-5 h-100" style="margin-left: 100px;">
 
         <div class="header mb-3">
-            <span class="fs-1">Quizzes by Quizmaster</span>
+            <span class="fs-1">Quizzes You've Made</span>
         </div>
 
         <div class="content h-100 d-flex flex-wrap gap-2">
@@ -33,11 +33,46 @@
                 </div>
             </div>
 
+            <?php foreach ($quizzes as $quiz): ?>
+
+                <div class="card quizcard w-25">
+                    <div class="card-header fs-4 bg-green text-white"><?= $quiz["title"] ?></div>
+                    <div class="card-body">
+                        <input type="hidden" name="id" value="<?= $quiz["id"] ?>">
+                        <img class="w-100" src="<?= '/' . ($quiz["image"] ?? '') ?>" alt="">
+                        <p><?= $quiz["description"] ?></p>
+                        <a href="/user/quizzes/<?= $quiz["id"] ?>" class="btn btn-outline-success">Edit</a>
+                        <a href="#" class="btn btn-outline-primary">Preview</a>
+                        <a href="#" class="btn btn-outline-danger btn-delete">Delete</a>
+                    </div>
+                </div>
+
+            <?php endforeach ?>
 
 
         </div>
 
     </main>
+
+    <script type="module">
+        $(() => {
+
+            $(".quizcard")
+                .find('.btn-delete')
+                .click(async (e) => {
+
+                    const quizcard = $(e.target).parent().parent()
+                    const quizId = quizcard.find("input[name='id']").val()
+                    const req = { method: "DELETE", body: JSON.stringify({ id: quizId }) }
+
+                    await fetch('/user/quiz', req)
+                        .then(() => quizcard.remove())
+                        .then(() => console.log("Quiz removed successfully."))
+                        .catch(err => console.log(err))
+                })
+
+        })
+    </script>
 
 </body>
 

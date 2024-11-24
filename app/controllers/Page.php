@@ -13,8 +13,6 @@ class Page extends Controller
     {
         parent::__construct();
         if (! logged_in()) return redirect('auth/login');
-
-        $this->call->model('Quiz_model', 'quiz');
     }
 
     public function index()
@@ -29,9 +27,17 @@ class Page extends Controller
 
     public function user_quizzes($quizId = null)
     {
+        $this->call->model('Quiz_model', 'quiz');
+
         # normal
         if ($quizId === null) {
-            $this->call->view("user/quizzes");
+            # get all quizzes of user
+            $quizzes = $this->db->table('quizzes')
+                ->where('creator_id', get_user_id())
+                ->where_null('deleted_at')
+                ->get_all();
+
+            $this->call->view("user/quizzes", [ "quizzes" => $quizzes ]);
             return;
         }
 
