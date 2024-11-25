@@ -9,8 +9,8 @@
         <div class="header toolbox w-100 p-3 bg-green-darken-2 rounded text-white d-flex justify-content-between align-items-center">
             <span class="fs-2 fw-bold mx-3">Quizmaster</span>
             <div class="actions">
-                <a href="/index.php/user/quizzes" class="btn btn-lg btn-secondary">Done</a>
-                <a href="#" class="btn btn-lg btn-primary">Preview</a>
+                <a href="/index.php/user/quizzes" class="btn btn-lg btn-primary">Done</a>
+                <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg bg-green-accent-4 text-white" title="Play"><i class="bi bi-eye-fill"></i></a>
             </div>
         </div>
 
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-group mt-3">
                         <label for="visibility">Visibility</label>
-                        <select class="form-control form-control-lg" name="description" id="visibility" value="<?= $quiz["visibility"] ?>">
+                        <select class="form-control form-control-lg" name="visibility" id="visibility" value="<?= $quiz["visibility"] ?>">
                             <option value="Public">Public (Anyone can see and answer your quiz.)</option>
                             <option value="Unlisted">Unlisted (Only those who have a link to this quiz.)</option>
                             <option value="Private">Private (Only you can access this quiz.)</option>

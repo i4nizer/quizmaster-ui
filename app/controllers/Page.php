@@ -25,6 +25,25 @@ class Page extends Controller
         $this->call->view('user/profile');
     }
 
+    public function user_play($quizId = null)
+    {
+        if ($quizId === null) return redirect('user/quizzes');
+
+        $this->call->model('Quiz_model', 'quiz');
+        
+        # find quiz
+        $quiz = $this->quiz->find($quizId);
+        if (!$quiz) return redirect('user/quizzes');
+        
+        $this->call->model('Question_model', 'question');
+
+        # find quiz questions
+        $questions = $this->question->raw("select * from questions where quiz_id = ?", [$quizId])->fetchAll();
+        if (!$questions) return redirect('user/quizzes');
+
+        $this->call->view('user/play', [ "quiz" => $quiz, "questions" => $questions ]);
+    }
+
     public function user_quizzes($quizId = null)
     {
         $this->call->model('Quiz_model', 'quiz');

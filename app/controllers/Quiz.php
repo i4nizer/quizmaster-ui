@@ -32,14 +32,16 @@ class Quiz extends Controller
             $description = $raw['description'] ?? "";
             $visibility = $raw['visibility'] ?? "Public";
 
-            $quizId = $this->quiz->create($userId, $title, $description, $visibility);
             $data = [
-                "id" => $quizId,
                 "title" => $title,
                 "description" => $description,
                 "visibility" => $visibility,
+                "creator_id" => $userId,
             ];
 
+            $quizId = $this->quiz->insert($data);
+
+            $data["id"] = $quizId;
             if ($quizId) $this->json->send($data);
             else $this->json->error('Failed to create new quiz.', 500);
         }

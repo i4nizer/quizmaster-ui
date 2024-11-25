@@ -62,10 +62,6 @@ const loadAnswers = async () => {
     return responses
 }
 
-const loadImages = async () => {
-    
-}
-
 const loadData = async () => {
     await loadQuiz()
         .then(() => console.log('Quiz data loaded.'))

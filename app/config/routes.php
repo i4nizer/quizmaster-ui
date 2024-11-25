@@ -53,6 +53,7 @@ $router->group('/user', function() use ($router) {
     $router->get('/profile', 'Page::user_profile');
     $router->get('/quizzes', 'Page::user_quizzes');
     $router->get('/quizzes/{quizId}', 'Page::user_quizzes');
+    $router->get('/play/{quizId}', 'Page::user_play');
     
     # API
     $router->group('/quiz', function () use ($router) {
