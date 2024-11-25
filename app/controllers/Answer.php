@@ -46,7 +46,7 @@ class Answer extends Controller
             $data = $this->json->read();
             $res = $this->ans->update($data['id'], $data);
 
-            if ($res) $this->json->send($data);
+            if ($res) $this->json->send($this->ans->find($data['id']));
             else $this->json->error("Failed to update answer.", 500);
         } 
         else $this->json->error("Incorrect request method or no data provided.");

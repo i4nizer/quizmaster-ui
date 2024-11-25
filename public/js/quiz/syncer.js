@@ -225,7 +225,7 @@ const updateAnswer = async (data) => {
                 console.log('Answer updated successfully.')
             }
         }
-    }
+    }   
     else console.log(await res.text())
 
     return payload

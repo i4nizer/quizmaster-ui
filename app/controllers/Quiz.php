@@ -94,7 +94,8 @@ class Quiz extends Controller
             $this->upload
                 ->max_size(5)
                 ->set_dir($dir)
-                ->is_image();
+                ->is_image()
+                ->encrypt_name();
 
             if ($this->upload->do_upload()) {
 

@@ -105,7 +105,7 @@
 
                             <div class="text-center mt-3">
                                 <span>Don't have an account? </span>
-                                <a href="register.php" class="register-link">Register</a>
+                                <a href="register" class="register-link">Register</a>
                             </div>
                         </form>
                     </div>

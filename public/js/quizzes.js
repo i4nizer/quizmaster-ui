@@ -25,6 +25,15 @@ const onQuizCreate = async (e) => {
         .catch(err => console.log(err))
 }
 
+const onCopyLink = (e) => {
+
+    e.preventDefault()
+    
+    const link = location.protocol + "//" + location.hostname + $(e.target).attr('href')
+    navigator.clipboard.writeText(link)
+    alert(`Link copied to clipboard: ${link}`)
+}
+
 const onQuizDelete = async (e) => {
 
     const quizcard = $(e.target).parent().parent()
@@ -47,3 +56,4 @@ const onQuizDelete = async (e) => {
 
 quizform.on('submit', onQuizCreate)
 quizcard.find('.btn-delete').click(onQuizDelete)
+quizcard.find('.btn-copy-link').click(onCopyLink)

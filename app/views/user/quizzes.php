@@ -2,6 +2,8 @@
 
 <?php include APP_DIR . 'views/templates/head.php'; ?>
 
+<style>.card { width: calc(25% - 1rem) !important; }</style>
+
 <body>
     <?php include APP_DIR . 'views/templates/sidenav.php'; ?>
 
@@ -13,7 +15,7 @@
 
         <div class="content h-100 d-flex flex-wrap gap-3">
 
-            <div class="card quizcard w-25">
+            <div class="card quizcard">
                 <div class="card-header fs-4 bg-green text-white">Create Your Own!</div>
                 <form class="card-body quizform">
                     <div class="form-group">
@@ -40,14 +42,14 @@
 
             <?php foreach ($quizzes as $quiz): ?>
 
-                <div class="card quizcard w-25" style="height: fit-content;">
+                <div class="card quizcard" style="height: fit-content;">
                     <div class="card-header fs-4 bg-green text-white"><?= $quiz["title"] ?></div>
                     <div class="card-body">
                         <input type="hidden" name="id" value="<?= $quiz["id"] ?>">
                         <img class="w-100" src="<?= '/' . ($quiz["image"] ?? '') ?>" alt="">
                         <p class="my-2"><?= $quiz["description"] ?></p>
-                        <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg btn-outline-success" title="Play"><i class="bi bi-eye-fill"></i></a>
-                        <button class="btn btn-lg btn-outline-secondary btn-copy-link" title="Copy Link"><i class="bi bi-link-45deg"></i></button>
+                        <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg btn-outline-success" title="Play"><i class="bi bi-play-fill"></i></a>
+                        <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg btn-outline-secondary btn-copy-link" title="Copy Link"><i class="bi bi-link-45deg"></i></a>
                         <a href="/user/quizzes/<?= $quiz["id"] ?>" class="btn btn-lg btn-outline-primary" title="Edit"><i class="bi bi-pencil"></i></a>
                         <button class="btn btn-lg btn-outline-danger btn-delete" title="Delete"><i class="bi bi-trash"></i></button>
                     </div>

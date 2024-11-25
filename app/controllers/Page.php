@@ -17,7 +17,7 @@ class Page extends Controller
 
     public function index()
     {
-        $this->call->view('home');
+        redirect('user/quizzes');
     }
 
     public function user_profile()
@@ -29,15 +29,19 @@ class Page extends Controller
     {
         if ($quizId === null) return redirect('user/quizzes');
 
-        $this->call->model('Quiz_model', 'quiz');
         
         # find quiz
+        $this->call->model('Quiz_model', 'quiz');
+        
         $quiz = $this->quiz->find($quizId);
         if (!$quiz) return redirect('user/quizzes');
-        
-        $this->call->model('Question_model', 'question');
 
+        # check visibility
+        if ($quiz['visibility'] == 'Private' && get_user_id() != $quiz['creator_id']) return redirect('user/quizzes');
+        
         # find quiz questions
+        $this->call->model('Question_model', 'question');
+        
         $questions = $this->question->raw("select * from questions where quiz_id = ?", [$quizId])->fetchAll();
         if (!$questions) return redirect('user/quizzes');
 

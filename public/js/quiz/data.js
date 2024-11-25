@@ -22,10 +22,11 @@ const questions = []
 
 const loadQuiz = async () => {
     const res = await fetch(`/user/quiz/${quiz.id}`)
-    const rescpy = res.clone()
+    let payload = null
 
     if (res.status < 300) {
         const data = await res.json()
+        payload = data
         
         quiz.id = data.id
         quiz.title = data.title
@@ -34,32 +35,33 @@ const loadQuiz = async () => {
         quiz.image = data.image
     }
 
-    return rescpy
+    return payload
 }
 
 const loadQuestions = async () => {
     const res = await fetch(`/user/quiz/${quiz.id}/question`)
-    const rescpy = res.clone()
+    let payload
 
     if (res.status < 300) {
         const data = await res.json()
+        payload = data
         questions.push(...data)
     }
 
-    return rescpy
+    return payload
 }
 
 const loadAnswers = async () => {
-    const responses = []
+    const payload = []
 
     for (const question of questions) {
         const res = await fetch(`/user/quiz/question/${question?.id}/answer`)
-        responses.push(res.clone())
         
-        question.answers = await res.json()
+        question.answers = await res.json() ?? []
+        payload.push(question.answers)
     }
 
-    return responses
+    return payload
 }
 
 const loadData = async () => {
@@ -77,7 +79,6 @@ const loadData = async () => {
     
     return { quiz, questions, answers: questions.map(q => q.answers) }
 }
-
 
 
 

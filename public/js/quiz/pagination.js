@@ -1,11 +1,12 @@
-import { questions } from "./data.js"
+import { loadData, questions, quiz } from "./data.js"
 import { onQuestionActive, onQuizActive } from "./handler.js"
 
 
 
 
 
-let currentPage = 0
+const savedPage = Number(localStorage.getItem('current-page'))
+let currentPage = isNaN(savedPage) ? 0 : savedPage
 const pages = []
 
 const pagination = $('.pagination')
@@ -36,6 +37,8 @@ const move = (steps) => {
     const result = currentPage + steps
     const valid = result >= 0 && result <= pages.length - 1
     if (valid) currentPage = result
+    
+    localStorage.setItem('current-page', currentPage)
 }
 
 const click = (e) => {
@@ -61,7 +64,7 @@ const click = (e) => {
 
 
 
-const init = () => {
+const init = async () => {
     
     pages.length = 0
     pages.push({ text: 'Quiz', onactive: onQuizActive })
@@ -72,6 +75,7 @@ const init = () => {
 
     }
 
+    currentPage = currentPage > pages.length - 1 ? 0 : currentPage
     render()
     pagination.click(click)
 }
@@ -79,5 +83,7 @@ const init = () => {
 
 
 
-init()
+
+
+await init()
 export { currentPage, pages, init, render, move }

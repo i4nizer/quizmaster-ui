@@ -76,7 +76,7 @@ const onAddQuestion = async (e) => {
     const question = {
         quiz_id: quiz.id,
         type: elem.attr('name'),
-        number: Number(questions.at(-1).number) + 1,
+        number: Number(questions.length > 0 ? questions.at(-1).number : 0) + 1,
         text: '',
     }
     

@@ -9,8 +9,8 @@
         <div class="header toolbox w-100 p-3 bg-green-darken-2 rounded text-white d-flex justify-content-between align-items-center">
             <span class="fs-2 fw-bold mx-3">Quizmaster</span>
             <div class="actions">
+                <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg bg-green-accent-4 text-white" title="Play"><i class="bi bi-play-fill"></i></a>
                 <a href="/index.php/user/quizzes" class="btn btn-lg btn-primary">Done</a>
-                <a href="/user/play/<?= $quiz["id"] ?>" class="btn btn-lg bg-green-accent-4 text-white" title="Play"><i class="bi bi-eye-fill"></i></a>
             </div>
         </div>
 

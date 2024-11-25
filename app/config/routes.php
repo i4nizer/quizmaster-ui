@@ -87,8 +87,19 @@ $router->group('/user', function() use ($router) {
 
         });
 
+        $router->group('/response', function () use ($router) {
+
+            $router->get('/', 'Response::get');
+            $router->post('/', 'Response::post');
+            $router->patch('/', 'Response::patch');
+            $router->delete('/', 'Response::delete');
+
+        });
+
         $router->get('/{quizId}', 'Quiz::get');
         $router->get('/{quizId}/question', 'Question::get_by_quiz');
+        $router->get('/{quizId}/response', 'Response::get_by_quiz');
+
 
     });
 
