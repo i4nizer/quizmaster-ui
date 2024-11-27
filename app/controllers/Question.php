@@ -50,7 +50,10 @@ class Question extends Controller
             $data = $this->json->read();
             $res = $this->question->update($data['id'], $data);
 
-            if ($res) $this->json->send($data);
+            if ($res) {
+                $res = $this->question->find($data['id']);
+                $this->json->send($res);
+            }
             else $this->json->error("Failed to update question.", 500);
         }
         else $this->json->error("Incorrect request method or no data provided.");

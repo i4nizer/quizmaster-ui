@@ -105,7 +105,11 @@ const updateQuestion = async (data) => {
         
         const index = questions.findIndex(q => q.id == data.id)
         if (index !== -1) {
+            const answers = questions[index].answers
             questions[index] = data
+            questions[index].answers = answers
+            
+            payload = questions[index]
             console.log('Question updated successfully.')
         }
     }

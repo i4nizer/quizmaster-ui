@@ -102,6 +102,9 @@ const onAddQuestion = async (e) => {
             break;
     }
 
+    // Add answers to the question
+    // const qindex = questions.findIndex(q => q.id == )
+
     // Re-init pagination to add the new items
     init()
 
