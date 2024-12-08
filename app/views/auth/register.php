@@ -1,116 +1,60 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
-    <link rel="icon" type="image/png" href="<?=base_url();?>public/img/favicon.ico"/>
-    <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <!-- Styles -->
-    <link href="<?=base_url();?>public/css/main.css" rel="stylesheet">
-    <link href="<?=base_url();?>public/css/style.css" rel="stylesheet">
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-</head>
-<body>
-    <?php
-    include APP_DIR.'views/templates/nav_auth.php';
-    ?>
-    <main class="py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header">Register</div>
-                        <div class="card-body">
-                            <?php flash_alert(); ?>
-                            <form id="regForm" method="POST" action="<?=site_url('auth/register');?>">
-                            <?php csrf_field(); ?>
-                                <div class="row mb-3">
-                                    <label for="username" class="col-md-4 col-form-label text-md-end">Username</label>
-                                    <div class="col-md-6">
-                                        <input id="username" type="text" class="form-control " name="username" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="email" class="col-md-4 col-form-label text-md-end">Email Address</label>
-                                    <div class="col-md-6">
-                                        <input id="email" type="email" class="form-control" name="email" value="" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="password" class="col-md-4 col-form-label text-md-end">Password</label>
-                                    <div class="col-md-6">
-                                        <input id="password" type="password" class="form-control" name="password" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="password_confirmation" class="col-md-4 col-form-label text-md-end">Confirm Password</label>
+<?php defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed'); ?>
 
-                                    <div class="col-md-6">
-                                        <input id="password_confirmation" type="password" class="form-control" name="password_confirmation" required>
-                                    </div>
-                                </div>
-                                <div class="row mb-0">
-                                    <div class="col-md-6 offset-md-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            Register
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+<?php include APP_DIR . 'views/templates/head.php'; ?>
+
+<body class="h-100">
+
+    <main class="container-fluid h-100 d-flex justify-content-center align-items-center">
+
+        <div class="col-10 col-md-8 col-lg-6 col-xxl-4">
+
+            <div class="card">
+                <div class="card-header fs-2 px-5 py-3 bg-success text-white">Register</div>
+                <form class="card-body p-5 d-flex flex-column" id="regForm" method="POST" action="<?= site_url('auth/register'); ?>">
+
+                    <?php flash_alert(); ?>
+                    <?php csrf_field(); ?>
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="fs-3">Username</label>
+                        <input id="username" type="text" class="form-control form-control-lg fs-4" name="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+">
+                        <div class="invalid-feedback">Must be 3-20 characters, letters, numbers, or underscores.</div>
                     </div>
-                </div>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="fs-3">Email Address</label>
+                        <input id="email" type="email" class="form-control form-control-lg fs-4" name="email" required>
+                        <div class="invalid-feedback">Please provide a valid email address.</div>
+                    </div>
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="fs-3">Password</label>
+                        <input id="password" type="password" class="form-control form-control-lg fs-4" name="password" required minlength="8">
+                        <div class="invalid-feedback">Password must be at least 8 characters long.</div>
+                    </div>
+                    <!-- Confirm Password -->
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="fs-3">Confirm Password</label>
+                        <input id="password_confirmation" type="password" class="form-control form-control-lg fs-4" name="password_confirmation" required minlength="8">
+                        <div class="invalid-feedback">Please confirm your password.</div>
+                    </div>
+                    <!-- Links -->
+                    <div class="mb-3 px-2 d-flex justify-content-between fs-5">
+                        <a href="<?= site_url('auth/password-reset'); ?>" class="text-decoration-none">Forgot Password?</a>
+                        <span>Already have an account? <a href="/auth/login" class="register-link">Login</a></span>
+                    </div>
+                    <!-- Submit -->
+                    <div class="my-3">
+                        <button type="submit" class="btn btn-lg btn-success w-100 py-3 fs-4">Register</button>
+                    </div>
+                </form>
+
             </div>
+
         </div>
+
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script>
-        $(function() {
-            var regForm = $("#regForm")
-                if(regForm.length) {
-                    regForm.validate({
-                        rules: {
-                            email: {
-                                required: true,
-                            },
-                            password: {
-                                required: true,
-                                minlength: 8
-                            },
-                            password_confirmation: {
-                                required: true,
-                                minlength: 8
-                            },
-                            username: {
-                                required: true,
-                                minlength: 5,
-                                maxlength: 20
-                            }
-                        },
-                        messages: {
-                            email: {
-                                required: "Please input your email address.",                            
-                            },
-                            password: {
-                                required: "Please input your password",
-                                minlength: jQuery.validator.format("Password must be atleast {0} characters.")
-                            },
-                            password_confirmation: {
-                                required: "Please input your password",
-                                minlength: jQuery.validator.format("Password must be atleast {0} characters.")
-                            },
-                            username: {
-                                required: "Please input your username.",                            
-                            }
-                        },
-                    })
-                }
-        })
-    </script>
+
 </body>
+
 </html>

@@ -51,9 +51,13 @@ $router->group('/user', function() use ($router) {
     # PAGES
     $router->get('/', 'Page');  
     $router->get('/profile', 'Page::user_profile');
+    $router->get('/leaderboards', 'Page::user_leaderboards');
     $router->get('/quizzes', 'Page::user_quizzes');
-    $router->get('/quizzes/{quizId}', 'Page::user_quizzes');
+    $router->get('/quizzes/{quizId}', 'Page::user_quizzes_quiz');
     $router->get('/play/{quizId}', 'Page::user_play');
+    
+    # API
+    $router->patch('/', 'User::patch');
     
     # API
     $router->group('/quiz', function () use ($router) {
@@ -62,6 +66,9 @@ $router->group('/user', function() use ($router) {
         $router->post('/', 'Quiz::post');
         $router->patch('/', 'Quiz::patch');
         $router->delete('/', 'Quiz::delete');
+
+        $router->get('/public', 'Quiz::get_public');
+        
         $router->post('/upload', 'Quiz::upload');
         $router->delete('/upload', 'Quiz::unload');
         
@@ -93,6 +100,8 @@ $router->group('/user', function() use ($router) {
             $router->post('/', 'Response::post');
             $router->patch('/', 'Response::patch');
             $router->delete('/', 'Response::delete');
+            
+            # $router->get('/{responseId}', 'Response::get');
 
         });
 

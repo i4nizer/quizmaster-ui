@@ -13,6 +13,7 @@ const quiz = {
     title: '',
     description: '',
     visibility: 'Public',
+    category: 'Fun',
     image: '',
 }
 
@@ -32,6 +33,7 @@ const loadQuiz = async () => {
         quiz.title = data.title
         quiz.description = data.description
         quiz.visibility = data.visibility
+        quiz.category = data.category
         quiz.image = data.image
     }
 

@@ -10,7 +10,7 @@
             <span class="fs-2 fw-bold mx-3">Quiz: <?= $quiz["title"] ?></span>
             <div class="actions">
                 <button class="btn btn-lg btn-danger btn-reset-quiz" title="Restart">Restart</button>
-                <a href="/index.php/user/quizzes" class="btn btn-lg btn-primary">Save & Exit</a>
+                <a href="/user/quizzes" class="btn btn-lg btn-primary">Save & Exit</a>
             </div>
         </div>
 

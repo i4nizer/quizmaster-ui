@@ -14,8 +14,15 @@ class Response extends Controller
     }
 
     /** */
-    public function get($responseId)
+    public function get($responseId = null)
     {
+        # get by user
+        if ($responseId == null) {
+            $response = $this->res->raw('select * from responses where user_id = ?', [get_user_id()])->fetchAll();
+            return $this->json->send($response);
+        }
+
+        # specific
         $response = $this->res->find($responseId);
         $this->json->send($response);
     }
@@ -23,7 +30,7 @@ class Response extends Controller
     /** */
     public function get_by_quiz($quizId)
     {
-        $responses = $this->res->get_by_quiz($quizId);
+        $responses = $this->res->raw('select * from responses where user_id = ? and quiz_id = ?', [get_user_id(), $quizId])->fetchAll();
         $this->json->send($responses);
     }
 

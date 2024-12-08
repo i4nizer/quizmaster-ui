@@ -74,6 +74,6 @@
 
 #sidenav div a:hover,
 #sidenav div a.active {
-    color: var(--green-accent-4);
+    color: var(--green-accent-4) !important;
     background-color: #313131;
 }

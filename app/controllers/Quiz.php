@@ -14,10 +14,24 @@ class Quiz extends Controller
     }
 
     /** Get quiz of the currently logged-in user. */
-    public function get($quizId)
+    public function get($quizId = null)
     {
+        # all quizzes of user
+        if ($quizId == null) {
+            $quiz = $this->quiz->raw('select * from quizzes where creator_id = ?', [get_user_id()])->fetchAll();
+            return $this->json->send($quiz);
+        }
+
+        # specific quiz
         $quiz = $this->quiz->find($quizId);
         $this->json->send($quiz);
+    }
+
+    /** Get all public quizzes */
+    public function get_public()
+    {
+        $quizzes = $this->quiz->raw('select * from quizzes where visibility = ?', ['Public'])->fetchAll();
+        return $this->json->send($quizzes);
     }
 
     /** Create a quiz based on current user. */
@@ -31,11 +45,13 @@ class Quiz extends Controller
             $title = $raw['title'];
             $description = $raw['description'] ?? "";
             $visibility = $raw['visibility'] ?? "Public";
+            $category = $raw['category'] ?? "Fun";
 
             $data = [
                 "title" => $title,
                 "description" => $description,
                 "visibility" => $visibility,
+                "category" => $category,
                 "creator_id" => $userId,
             ];
 

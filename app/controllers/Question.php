@@ -14,8 +14,15 @@ class Question extends Controller
     }
 
     /** */
-    public function get($questionId)
+    public function get($questionId = null)
     {
+        # get all
+        if ($questionId == null) {
+            $questions = $this->question->all();
+            return $this->json->send($questions);
+        }
+
+        # specific
         $question = $this->question->find($questionId);
         $this->json->send($question);
     }

@@ -1,85 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-	<title>New Password</title>
-	<link rel="icon" type="image/png" href="<?=base_url();?>public/img/favicon.ico"/>
-    <link href="<?=base_url();?>public/css/main.css" rel="stylesheet">
-    <link href="<?=base_url();?>public/css/style.css" rel="stylesheet">
-</head>
-<body>
-    <?php
-    include APP_DIR.'views/templates/nav_auth.php';
-    ?>
-    <main class="py-4">
-        <div class="container">
-            <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Login</div>
-                    <div class="card-body">
-                        <span class="valid-feedback" role="alert">
-                            <strong>Note: Password must be at least 8 characters and contains one of this special characters (!@£$%^&*-_+=?), number, uppercase and lowercase letters.</strong>
-                        </span>                        
-                        <?php flash_alert() ;?>
-                        <form id="myForm" action="<?=site_url('auth/set-new-password');?>" method="post">
-                            <?php csrf_field(); ?>
-                            <input type="hidden" name="token" value="<?php !empty($_GET['token']) && print $_GET['token'];?>"> 
-                            <div class="row mb-3">
-                                <label for="password" class="col-md-4 col-form-label text-md-end">New Password</label>
-                                <div class="col-md-6">
-                                    <input id="password" type="password" class="form-control " name="password" required>
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="password" class="col-md-4 col-form-label text-md-end">Confirm New Password</label>
-                                <div class="col-md-6">
-                                    <input id="re_password" type="password" class="form-control " name="re_password" required>
-                                </div>
-                            </div>
-                            <div class="row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button type="submit" class="btn btn-primary">Proceed</button><a class="btn btn-link" href="<?=site_url();?>"> Back to Home</a>
-                                </div>
-                            </div>
-                        </form>
+<?php defined('PREVENT_DIRECT_ACCESS') or exit('No direct script access allowed'); ?>
+
+<?php include APP_DIR . 'views/templates/head.php'; ?>
+
+<body class="h-100">
+
+    <main class="container-fluid h-100 d-flex justify-content-center align-items-center">
+
+        <div class="col-10 col-md-8 col-lg-6 col-xxl-4">
+
+            <div class="card">
+                <div class="card-header fs-2 px-5 py-3 bg-success text-white d-flex justify-content-between align-items-center">
+                    <span>Login</span>
+                    <div class="card-actions">
+                        <a class="text-white" href="/auth/register" title="Register"><i class="bi bi-person-plus-fill"></i></a>
+                        <a class="text-white mx-2" href="/auth/login" title="Login"><i class="bi bi-box-arrow-in-right"></i></a>
                     </div>
                 </div>
+                <span class="valid-feedback" role="alert">
+                    <strong>Note: Password must be at least 8 characters and contains one of this special characters (!@£$%^&*-_+=?), number, uppercase and lowercase letters.</strong>
+                </span>
+                <?php flash_alert(); ?>
+                <form class="card-body p-5 d-flex flex-column" id="myForm" action="<?= site_url('auth/set-new-password'); ?>" method="post">
+                    <?php csrf_field(); ?>
+                    <input type="hidden" name="token" value="<?php !empty($_GET['token']) && print $_GET['token']; ?>">
+                    <div class="mb-3">
+                        <label for="password" class="fs-3">New Password</label>
+                        <input id="password" type="password" class="form-control form-control-lg fs-3" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="fs-3">Confirm New Password</label>
+                        <input id="re_password" type="password" class="form-control form-control-lg fs-3" name="re_password" required>
+                    </div>
+                    <div class="my-3">
+                        <button type="submit" class="btn btn-lg btn-success w-100 py-3 fs-4">Proceed</button>
+                    </div>
+                </form>
             </div>
+
         </div>
+
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script>
-        $(function() {
-            var myForm = $("#myForm")
-                if(myForm.length) {
-                    myForm.validate({
-                        rules: {
-                            password: {
-                                required: true,
-                                minlength: 8
-                            },
-                            re_password: {
-                                required: true,
-                                minlength: 8
-                            }
-                        },
-                        messages: {
-                            password: {
-                                required: "Please input your password",
-                                minlength: jQuery.validator.format("Password must be atleast {0} characters.")
-                            },
-                            re_password: {
-                                required: "Please input your password",
-                                minlength: jQuery.validator.format("Password must be atleast {0} characters.")
-                            }
-                        },
-                    })
-                }
-        })
-    </script>
+
 </body>
+
 </html>

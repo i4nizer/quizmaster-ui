@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
 	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>QuizMaster</title>
-	<link rel="icon" type="image/png" href="<?= base_url(); ?>public/img/favicon.ico" />
+	<link rel="icon" type="image/png" href="<?= base_url(); ?>public/images/logo.png" />
 
 	<!-- Fonts -->
 	<link rel="dns-prefetch" href="//fonts.gstatic.com">

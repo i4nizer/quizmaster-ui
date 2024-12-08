@@ -22,7 +22,43 @@ class Page extends Controller
 
     public function user_profile()
     {
-        $this->call->view('user/profile');
+        # get user
+        $user = $this->db->raw('select * from users where id = ?', [get_user_id()])->fetch();
+        
+        # store data to pass
+        $data = [
+            'user' => [
+                'id' => $user['id'],
+                'username' => $user['username'],
+                'email' => $user['email'],
+                'created_at' => $user['created_at'],
+            ]
+        ];
+
+        $this->call->view('user/profile', $data);
+    }
+
+    public function user_leaderboards()
+    {
+        # get top 100 players with the highest quiz score
+        $query = "
+            SELECT 
+                u.id AS user_id,
+                u.username AS username,
+                SUM(r.correct) AS total_score
+            FROM users u
+            JOIN responses r
+            ON u.id = r.user_id
+            WHERE r.correct = TRUE
+            GROUP BY u.id, u.username
+            ORDER BY total_score DESC
+            LIMIT 100;
+        ";
+        
+        $players = $this->db->raw($query)->fetchAll();
+        $data['top_players'] = $players;
+
+        $this->call->view('user/leaderboards', $data);
     }
 
     public function user_play($quizId = null)
@@ -48,36 +84,25 @@ class Page extends Controller
         $this->call->view('user/play', [ "quiz" => $quiz, "questions" => $questions ]);
     }
 
-    public function user_quizzes($quizId = null)
+    public function user_quizzes()
     {
         $this->call->model('Quiz_model', 'quiz');
 
-        # normal
-        if ($quizId === null) {
-            # get all quizzes of user
-            $quizzes = $this->db->table('quizzes')
-                ->where('creator_id', get_user_id())
-                ->where_null('deleted_at')
-                ->get_all();
+        # get all quizzes of user
+        $userQuizzes = $this->db->table('quizzes')
+            ->where('creator_id', get_user_id())
+            ->where_null('deleted_at')
+            ->get_all();
 
-            $this->call->view("user/quizzes", [ "quizzes" => $quizzes ]);
-            return;
-        }
+        # set data
+        $data['user_quizzes'] = $userQuizzes;
 
-        # create quiz
-        if ($quizId == -1) {
-            $data = [
-                'creator_id' => get_user_id(),
-                'title' => "",
-                'description' => "",
-                'visibility' => 'Public'
-            ];
-            
-            $quizId = $this->quiz->insert($data);
-            redirect("user/quizzes/$quizId");
-                
-            return;
-        }
+        $this->call->view("user/quizzes", $data);
+    }
+    
+    public function user_quizzes_quiz($quizId)
+    {
+        $this->call->model('Quiz_model', 'quiz');
 
         # get quiz
         $quiz = $this->quiz->find($quizId);
