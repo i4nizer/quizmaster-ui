@@ -110,6 +110,7 @@ const onQuizDone = async () => {
 
     questionCardBody.html(html)
     imageCard.removeClass('d-flex').addClass('d-none')
+    imageCard.parent().removeClass('d-flex').addClass('d-none')
 }
 
 const onQuizReset = async (e) => {
@@ -122,6 +123,7 @@ const onQuizReset = async (e) => {
     await deleteAllResponse(data)
     await loadQuestion()
 
+    imageCard.parent().removeClass('d-none').addClass('d-flex')
     imageCard.removeClass('d-none').addClass('d-flex')
 }
 
