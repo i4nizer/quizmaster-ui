@@ -47,9 +47,25 @@ const onQuizDelete = async (e) => {
     const req = { method: "DELETE", body: JSON.stringify(data) }
 
     await fetch('/user/quiz', req)
-        .then(() => quizcard.remove())
-        .then(() => console.log("Quiz removed successfully."))
-        .then(() => $(`input[name="id"][value="${quizId}"]`).closest('.quizcard').remove())
+        .then(() => {
+            quizcard.remove();
+            console.log("Quiz removed successfully.");
+            $(`input[name="id"][value="${quizId}"]`).closest('.quizcard').remove();
+            
+            // in-case of empty state
+            const userQuizzesRow = $('.user-quizzes-row')
+            const quizcards = userQuizzesRow.find('.quizcard')
+                
+            if (quizcards.length == 0) {
+                const emptyState = `
+                    <div class="col-12 text-center user-quizzes-empty">
+                        <span class="fs-2 text-secondary">You Don't Have Quizzes Yet, <a href="#quizform">Create One!</a></span>
+                    </div>
+                `
+                userQuizzesRow.append(emptyState)
+            }
+            else userQuizzesRow.find('.user-quizzes-empty').remove()
+        })
         .catch(err => console.log(err))
 }
 

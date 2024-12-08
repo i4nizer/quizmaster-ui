@@ -63,7 +63,7 @@
             <hr class="my-5">
         </div>
 
-        <div class="row gy-3">
+        <div class="row gy-3 user-quizzes-row">
             <div id="user-quizzes" class="col-12">
                 <h1>Your Quizzes</h1>
             </div>
@@ -91,7 +91,7 @@
 
             <!-- If No Quizzes Yet -->
             <?php if (!$user_quizzes): ?>
-                <div class="col-12 text-center">
+                <div class="col-12 text-center user-quizzes-empty">
                     <span class="fs-2 text-secondary">You Don't Have Quizzes Yet, <a href="#quizform">Create One!</a></span>
                 </div>
             <?php endif ?>

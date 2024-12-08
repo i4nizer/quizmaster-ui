@@ -25,6 +25,12 @@
                             <span class="fw-bold <?= $nameStyle ?> mx-5">Score: <?= $player['total_score'] ?></span>
                         </div>
                     <?php endforeach ?>
+
+                    <!-- Empty State -->
+                    <?php if (!$top_players): ?>
+                        <div class="w-100 fs-2 text-center text-secondary">No Records Yet</div>
+                    <?php endif ?>
+
                 </div>
 
             </div>

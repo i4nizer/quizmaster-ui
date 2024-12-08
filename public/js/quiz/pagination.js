@@ -1,12 +1,11 @@
-import { loadData, questions, quiz } from "./data.js"
+import { questions } from "./data.js"
 import { onQuestionActive, onQuizActive } from "./handler.js"
 
 
 
 
 
-const savedPage = Number(localStorage.getItem('current-page'))
-let currentPage = isNaN(savedPage) ? 0 : savedPage
+let currentPage = 0
 const pages = []
 
 const pagination = $('.pagination')
