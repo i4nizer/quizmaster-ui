@@ -41,3 +41,40 @@
     color: #dc3545;
     font-weight: bold;
 }
+
+/* Example for an existing animation */
+.notification {
+  animation: fadeInOut 3s ease-in-out; /* Adjust duration to 3 seconds */
+}
+
+/* Example for transitions */
+.notification {
+  transition: all 0.5s ease; /* Adjust duration to 0.5 seconds */
+}
+
+/* Add a fade-in and fade-out animation */
+@keyframes fadeInOut {
+  0% {
+      opacity: 0;
+  }
+  50% {
+      opacity: 1;
+  }
+  100% {
+      opacity: 0;
+  }
+}
+
+/* Apply the animation to notifications */
+.notification {
+  animation: fadeInOut 2s ease-in-out; /* 2-second animation */
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: none;
+}

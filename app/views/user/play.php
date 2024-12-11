@@ -2,6 +2,10 @@
 
 <?php include APP_DIR . 'views/templates/head.php'; ?>
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
 <body class="h-100">
     <main class="container-fluid m-0 h-100 d-flex flex-column justify-content-between gap-3">
 

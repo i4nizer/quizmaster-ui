@@ -2,10 +2,6 @@ import { quiz, questions, responses } from "./data.js";
 import { getQuestion } from "./questioncard.js";
 import { createResponse, deleteAllResponse } from "./syncer.js";
 
-
-
-
-
 let question = {}
 const questionCard = $('.questioncard')
 const questionCardBody = questionCard.find('.card-body')
@@ -16,8 +12,6 @@ const footerToolbox = $('.footer.toolbox')
 const imageCard = $('.imagecard')
 const imagePreview = imageCard.find('img')
 
-
-
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // Random index from 0 to i
@@ -27,14 +21,12 @@ const shuffleArray = (array) => {
 }
 
 const loadQuestion = async () => {
-
     // find last unanswered question
     const index = questions.findIndex(q => q.response == null)
     
     // all answered, all done
     if (index == -1) {
         onQuizDone()
-        // alert(`You're all done in this quiz.`)
         return
     }
 
@@ -50,15 +42,12 @@ const loadQuestion = async () => {
 }
 
 const updateStatus = () => {
-
     footerToolbox.find('.question-number').text(`Question: ${responses.length + 1} of ${questions.length}`)
     footerToolbox.find('.question-type').text(`Type: ${question.type}`)
     footerToolbox.find('.quiz-score').text(`Score: ${responses.filter(r => r.correct).length}`)
-
 }
 
 const onAnswer = async (e) => {
-
     if (e.target.tagName !== 'BUTTON') return;
     const btn = $(e.target)
 
@@ -88,9 +77,40 @@ const onAnswer = async (e) => {
             break;
     }
 
-    // TODO: -------- Make effects here
-    if (response.correct) alert('Correct!');
-    else alert('Wrong!');
+    // Stylized alert with animation
+    if (response.correct) {
+        await Swal.fire({
+            title: 'Correct!',
+            text: 'Great job!',
+            icon: 'success',
+            confirmButtonText: 'Next',
+            background: '#f0f8ff',
+            iconColor: '#4CAF50',
+            confirmButtonColor: '#4CAF50',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        });
+    } else {
+        await Swal.fire({
+            title: 'Wrong!',
+            text: `The correct answer was: ${correctAns.text}`,
+            icon: 'error',
+            confirmButtonText: 'Try Again',
+            background: '#fff0f0',
+            iconColor: '#FF5252',
+            confirmButtonColor: '#FF5252',
+            showClass: {
+                popup: 'animate__animated animate__shakeX'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOut'
+            }
+        });
+    }
 
     // POST the response
     response.correct = Number(response.correct)
@@ -100,7 +120,6 @@ const onAnswer = async (e) => {
 }
 
 const onQuizDone = async () => {
-
     const correctAnswers = responses.filter(r => r.correct).length
 
     const html = `
@@ -114,7 +133,6 @@ const onQuizDone = async () => {
 }
 
 const onQuizReset = async (e) => {
-    
     const len = questions.length
     if (len == 0 || (len > 0 && question.id && question.id == questions[0].id)) return;
 
@@ -126,10 +144,6 @@ const onQuizReset = async (e) => {
     imageCard.parent().removeClass('d-none').addClass('d-flex')
     imageCard.removeClass('d-none').addClass('d-flex')
 }
-
-
-
-
 
 await loadQuestion()
 questionCardBody.on('click', 'button', onAnswer)
