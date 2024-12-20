@@ -112,4 +112,12 @@ class Page extends Controller
         else $this->call->view("user/quizzes/quiz", $data);
     }
 
+    public function user_recent()
+    {
+        $this->call->model('Response_model', 'res');
+        $data['quizzes'] = $this->res->raw("select distinct q.* from responses r inner join quizzes q on r.quiz_id = q.id");
+
+        $this->call->view('user/recent', $data);
+    }
+
 }

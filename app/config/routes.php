@@ -53,6 +53,7 @@ $router->group('/user', function() use ($router) {
     $router->get('/profile', 'Page::user_profile');
     $router->get('/leaderboards', 'Page::user_leaderboards');
     $router->get('/quizzes', 'Page::user_quizzes');
+    $router->get('/recent', 'Page::user_recent');
     $router->get('/quizzes/{quizId}', 'Page::user_quizzes_quiz');
     $router->get('/play/{quizId}', 'Page::user_play');
     

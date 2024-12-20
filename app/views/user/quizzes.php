@@ -127,7 +127,7 @@
                 </div>
             </div>
 
-            <div class="col-12 public-quizzes-list">
+            <div id="public-quizzes-list" class="col-12 public-quizzes-list">
 
                 <!-- List of Public Quizzes -->
 
